@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useCBOContext } from "../hooks/useCBOcontext";
 import { Link } from "react-router-dom";
 
-// Components
 const Home = () => {
   const { cbos, dispatch } = useCBOContext();
 
@@ -17,14 +16,17 @@ const Home = () => {
     };
 
     fetchCBOs();
-  }, [dispatch]); // Runs once when component mounts
+  }, [dispatch]);
 
   return (
     <div className="home">
+      {/* Header Section */}
       <div className="header">
         <h2>Community-Based Organizations</h2>
         <Link to="/register" className="register-button">Register</Link>
       </div>
+
+      {/* CBO Cards Grid */}
       <div className="cbo-cards-container">
         {cbos &&
           cbos.map((cbo) => (

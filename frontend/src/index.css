@@ -11,9 +11,18 @@ body {
   margin: 0;
   font-family: "Poppins";
 }
-header {
-  background: #fff;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #ddd;
 }
+
 header .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -182,7 +191,7 @@ strong {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
-  margin-top: 20px;
+  padding: 20px;
 }
 
 .cbo-card {
@@ -190,8 +199,7 @@ strong {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  width: 280px;
-  text-align: left;
+  width: 300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -287,7 +295,7 @@ strong {
 .register-button {
   background-color: #007bff;
   color: white;
-  padding: 8px 16px;
+  padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
   font-weight: bold;

@@ -1,7 +1,20 @@
 const mongoose = require("mongoose");
 
 const OperationDetailsSchema = new mongoose.Schema({
-  organization_registration: { type: String, required: true },
+  organization_registration: { 
+    type: String, 
+    required: true, 
+    enum: ["Cooperative", "Stock Corporation", "Non-stock Corporation", "Unregistered", "Others"],
+  },
+  other_organization_registration: { 
+    type: String,
+    validate: {
+      validator: function(value) {
+        return this.organization_registration !== "Others" || (this.organization_registration === "Others" && value.trim() !== "");
+      },
+      message: "You must specify an organization type when 'Others' is selected.",
+    },
+  },
   date_established: { type: Date, required: true },
   psic: { type: String },
   target_members: { type: String },
@@ -25,10 +38,10 @@ const OperationDetailsSchema = new mongoose.Schema({
   annual_gross_income: { type: Number },
   procurement_experience: [
     {
-      type: { type: String, required: true }, // ✅ Fix: Add `type: String` inside the object
-      number_of_participation: { type: Number, default: 0 },
-      number_of_contracts_won: { type: Number, default: 0 },
-      number_of_successful_implementations: { type: Number, default: 0 },
+      method: { type: String, required: true },
+      participation_count: { type: Number, default: 0 },
+      contracts_won: { type: Number, default: 0 },
+      successful_implementations: { type: Number, default: 0 },
     }
   ],
   sponsor_agency: { type: String, required: true },

@@ -3,9 +3,18 @@ require("dotenv").config();
 const cboRoutes = require("./routes/cbos"); // ✅ Correct name
 const mongoose = require("mongoose");
 const express = require("express");
+const cors = require("cors");
 
 // Express app
 const app = express();
+
+app.use(
+    cors({
+        origin: "http://localhost:3000", // Allow frontend origin
+        methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+        allowedHeaders: ["Content-Type"], // Allowed headers
+    })
+);
 
 // Middleware
 app.use(express.json());

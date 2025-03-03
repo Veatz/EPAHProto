@@ -1,8 +1,4 @@
-import React, { useState } from "react";
-
 const OperationStep = ({ formData, setFormData }) => {
-  const [customOrg, setCustomOrg] = useState("");
-
   if (!formData.annual_production) {
     setFormData({ ...formData, annual_production: [] });
   }
@@ -15,17 +11,15 @@ const OperationStep = ({ formData, setFormData }) => {
   const handleOrgChange = (e) => {
     const { value } = e.target;
     if (value === "Others") {
-      setFormData({ ...formData, organization_registration: customOrg });
+      setFormData({ ...formData, organization_registration: "Others", other_organization_registration: "" });
     } else {
-      setFormData({ ...formData, organization_registration: value });
-      setCustomOrg("");
+      setFormData({ ...formData, organization_registration: value, other_organization_registration: undefined });
     }
-  };
-
-  const handleCustomOrgChange = (e) => {
-    setCustomOrg(e.target.value);
-    setFormData({ ...formData, organization_registration: e.target.value });
-  };
+    };
+    const handleCustomOrgChange = (e) => {
+      setFormData({ ...formData, other_organization_registration: e.target.value });
+    };
+  
   
   const addProductionEntry = () => {
     setFormData({
@@ -87,20 +81,33 @@ const OperationStep = ({ formData, setFormData }) => {
     <div>
       <h2>Step 2: Operations</h2>
 
-      {/* Organization Registration */}
       <label>Organization Registration:</label>
-      <select name="organization_registration" value={formData.organization_registration} onChange={handleOrgChange} required>
-        <option value="">Select One</option>
-        <option value="Cooperative">Cooperative</option>
-        <option value="Stock Corporation">Stock Corporation</option>
-        <option value="Non-stock Corporation">Non-stock Corporation</option>
-        <option value="Unregistered">Unregistered</option>
-        <option value="Others">Others</option>
-      </select>
-      {formData.organization_registration === customOrg && (
-        <input type="text" value={customOrg} onChange={handleCustomOrgChange} placeholder="Others Please Specify" required />
-      )}
+    <select
+      name="organization_registration"
+      value={formData.organization_registration}
+      onChange={handleOrgChange}
+      required
+    >
+      <option value="">Select One</option>
+      <option value="Cooperative">Cooperative</option>
+      <option value="Stock Corporation">Stock Corporation</option>
+      <option value="Non-stock Corporation">Non-stock Corporation</option>
+      <option value="Unregistered">Unregistered</option>
+      <option value="Others">Others</option>
+    </select>
 
+    {/* Show input only when "Others" is selected */}
+    {formData.organization_registration === "Others" && (
+        <input
+          type="text"
+          name="other_organization_registration"
+          value={formData.other_organization_registration || ""}
+          onChange={handleCustomOrgChange}
+          placeholder="Others Please Specify"
+          required
+        />
+      )}
+          
       {/* Date Established */}
       <label>Date Established:</label>
       <input type="date" name="date_established" value={formData.date_established} onChange={handleInputChange} required />
