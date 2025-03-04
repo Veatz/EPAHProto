@@ -78,59 +78,69 @@ const OperationStep = ({ formData, setFormData }) => {
   };
 
   return (
-    <div>
+    <div className="step-container">
       <h2>Step 2: Operations</h2>
-
-      <label>Organization Registration:</label>
-    <select
-      name="organization_registration"
-      value={formData.organization_registration}
-      onChange={handleOrgChange}
-      required
-    >
-      <option value="">Select One</option>
-      <option value="Cooperative">Cooperative</option>
-      <option value="Stock Corporation">Stock Corporation</option>
-      <option value="Non-stock Corporation">Non-stock Corporation</option>
-      <option value="Unregistered">Unregistered</option>
-      <option value="Others">Others</option>
-    </select>
-
-    {/* Show input only when "Others" is selected */}
-    {formData.organization_registration === "Others" && (
-        <input
-          type="text"
-          name="other_organization_registration"
-          value={formData.other_organization_registration || ""}
-          onChange={handleCustomOrgChange}
-          placeholder="Others Please Specify"
+      <div className="form-field">
+          <label>Organization Registration:</label>
+        <select
+          name="organization_registration"
+          value={formData.organization_registration}
+          onChange={handleOrgChange}
           required
-        />
-      )}
-          
+        >
+          <option value="">Select One</option>
+          <option value="Cooperative">Cooperative</option>
+          <option value="Stock Corporation">Stock Corporation</option>
+          <option value="Non-stock Corporation">Non-stock Corporation</option>
+          <option value="Unregistered">Unregistered</option>
+          <option value="Others">Others</option>
+        </select>
+
+        {/* Show input only when "Others" is selected */}
+        {formData.organization_registration === "Others" && (
+            <input
+              type="text"
+              name="other_organization_registration"
+              value={formData.other_organization_registration || ""}
+              onChange={handleCustomOrgChange}
+              placeholder="Others Please Specify"
+              required
+            />
+          )}
+      </div>
+  
+      <div className="form-field">
       {/* Date Established */}
       <label>Date Established:</label>
       <input type="date" name="date_established" value={formData.date_established} onChange={handleInputChange} required />
-      
-      {/* PSIC */}
-      <label>Philippine Statistical Industry Classification (PSIC):</label>
-      <input type="text" name="psic" value={formData.psic} onChange={handleInputChange} />
-
-      {/* Target Members */}
-      <label>Target Members:</label>
-      <input type="text" name="target_members" value={formData.target_members} onChange={handleInputChange} />
-
-      {/* Number of Members */}
-      <label>Number of Members:</label>
-      <div>
-        <label>Male:</label>
-        <input type="number" name="male" value={formData.number_of_members?.male || 0} onChange={handleMemberCountChange} />
-        <label>Female:</label>
-        <input type="number" name="female" value={formData.number_of_members?.female || 0} onChange={handleMemberCountChange} />
-        <label>Total:</label>
-        <input type="number" value={(formData.number_of_members?.male || 0) + (formData.number_of_members?.female || 0)} readOnly />
       </div>
 
+      <div className="form-field">
+ {/* PSIC */}
+      <label>Philippine Statistical Industry Classification (PSIC):</label>
+      <input type="text" name="psic" value={formData.psic} onChange={handleInputChange} />
+      </div>
+     
+      <div className="form-field">
+      {/* Target Members */}
+            <label>Target Members:</label>
+            <input type="text" name="target_members" value={formData.target_members} onChange={handleInputChange} />
+
+            {/* Number of Members */}
+            <label>Number of Members:</label>
+            <div>
+              <label>Male:</label>
+              <input type="number" name="male" value={formData.number_of_members?.male || 0} onChange={handleMemberCountChange} />
+              <label>Female:</label>
+              <input type="number" name="female" value={formData.number_of_members?.female || 0} onChange={handleMemberCountChange} />
+              <label>Total:</label>
+              <input type="number" value={(formData.number_of_members?.male || 0) + (formData.number_of_members?.female || 0)} readOnly />
+            </div>
+
+        
+      </div>    
+      
+      <div className="form-field">
       {/* Annual Production */}
       <label>Annual Production:</label>
       <table>
@@ -157,28 +167,34 @@ const OperationStep = ({ formData, setFormData }) => {
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={addProductionEntry}>Add Product</button>
+      <button className = "remove-button" type="button" onClick={addProductionEntry}>Add Product</button>
+      </div>
 
+      <div className="form-field">
       {/* Area/Scope of Production */}
       <label>Area/Scope of Production:</label>
       <input type="text" name="production_scope" value={formData.production_scope} onChange={handleInputChange} />
-
+      </div>
+      <div className="form-field">
       {/* Area/Scope of Sales */}
       <label>Area/Scope of Sales:</label>
       <input type="text" name="sales_scope" value={formData.sales_scope} onChange={handleInputChange} />
-
+      <div className="form-field"></div>
       {/* Total Assets */}
       <label>Total Assets:</label>
       <input type="number" name="total_assets" value={formData.total_assets} onChange={handleInputChange} />
-
+      </div>
+      <div className="form-field">
       {/* Total Liabilities */}
       <label>Total Liabilities:</label>
       <input type="number" name="total_liabilities" value={formData.total_liabilities} onChange={handleInputChange} />
-
+      </div>
+      <div className="form-field">
       {/* Annual Gross Income */}
       <label>Annual Gross Income:</label>
       <input type="number" name="annual_gross_income" value={formData.annual_gross_income} onChange={handleInputChange} />
-
+      </div>
+      <div className="form-field">
       {/* Experience in Procurement */}
       <label>Experience in Procurement:</label>
       <div>
@@ -201,13 +217,16 @@ const OperationStep = ({ formData, setFormData }) => {
           <input type="number" value={exp.successful_implementations} onChange={(e) => handleProcurementNumbers(index, "successful_implementations", e.target.value)} />
         </div>
       ))}
-
+      </div>
+      <div className="form-field">
       {/* Sponsor Agency */}
       <label>Sponsor Agency:</label>
       <input type="text" name="sponsor_agency" value={formData.sponsor_agency} onChange={handleInputChange} required />
-
+      </div>
+      <div className="form-field">
       <label>Other Sponsor Agency (Optional):</label>
       <input type="text" name="other_sponsor_agency" value={formData.other_sponsor_agency} onChange={handleInputChange} />
+      </div>
     </div>
   );
 };

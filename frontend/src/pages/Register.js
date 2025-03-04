@@ -3,7 +3,9 @@ import RegistrationForm from "../components/RegistrationForm";
 const Register = () => {
   return (
     <div>
-      <h2>Register a CBO</h2>
+      <h1
+      style={{ color: '#10561A', margin: '20px',marginLeft:'150px', fontWeight:'bold'}}
+      >CBO Application</h1>
       <RegistrationForm />
     </div>
   );

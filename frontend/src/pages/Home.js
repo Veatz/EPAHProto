@@ -22,7 +22,7 @@ const Home = () => {
     <div className="home">
       {/* Header Section */}
       <div className="header">
-        <h2>Community-Based Organizations</h2>
+        <h1>Community-Based Organizations</h1>
         <Link to="/register" className="register-button">Register</Link>
       </div>
 
