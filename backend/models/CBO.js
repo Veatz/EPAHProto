@@ -31,6 +31,10 @@ const CBOSchema = new mongoose.Schema(
     operationDetails: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "OperationDetails" 
+    },
+    registrationDocuments: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "RegistrationDocuments" 
     }
     },
   { timestamps: true }

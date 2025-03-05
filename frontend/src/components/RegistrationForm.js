@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import BasicInfoStep from "./registrationSteps/BasicInfoStep";
 import OperationStep from "./registrationSteps/OperationStep";
+import RegistrationDocumentStep from "./registrationSteps/RegistrationDocumentStep";
 import { registerCBO } from "../utils/api"; // Import API function
 
 const RegistrationForm = () => {
@@ -30,25 +31,19 @@ const RegistrationForm = () => {
       sponsor_agency: "",
       other_sponsor_agency: "",
     },
+    documentsData: {
+      board_resolution: null,
+      registration_certificate: null,
+      business_permit: null,
+      bank_account_certificate: null,
+      bir_certificate: null,
+    }
   });
 
   const validateStep = () => {
     if (step === 1) {
       if (!formData.name || !formData.shortname || !formData.address || !formData.representation) {
         alert("Please fill in all required fields");
-        return false;
-      }
-    }
-    if (step === 2) {
-      if (!formData.operationDetails.organization_registration) {
-        alert("Please select an organization registration type");
-        return false;
-      }
-      if (
-        formData.operationDetails.organization_registration === "Others" &&
-        !customOrg.trim()
-      ) {
-        alert("Please specify the organization type when 'Others' is selected.");
         return false;
       }
     }
@@ -106,6 +101,13 @@ const RegistrationForm = () => {
           sponsor_agency: "",
           other_sponsor_agency: "",
         },
+        documentsData: {
+          board_resolution: null,
+          registration_certificate: null,
+          business_permit: null,
+          bank_account_certificate: null,
+          bir_certificate: null,
+        },
       });
       
       setStep(1);
@@ -119,26 +121,39 @@ const RegistrationForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {step === 1 && <BasicInfoStep formData={formData} setFormData={setFormData} />}
+      {step === 1 && (
+        <BasicInfoStep 
+          formData={formData} 
+          setFormData={setFormData} 
+          nextStep={nextStep} 
+        />
+      )}
       {step === 2 && (
         <OperationStep
           formData={formData.operationDetails}
           setFormData={(newOperationData) =>
             setFormData({ ...formData, operationDetails: newOperationData })
           }
-          customOrg={customOrg} // Pass customOrg to OperationStep
-          setCustomOrg={setCustomOrg} // Pass setter to update input
+          customOrg={customOrg}
+          setCustomOrg={setCustomOrg}
+          nextStep={nextStep}
+          prevStep={prevStep}
         />
       )}
-      <div>
-        {step > 1 && <button type="button" onClick={prevStep}>Back</button>}
-        {step < 2 && <button type="button" onClick={nextStep}>Next</button>}
-        {step === 2 && (
-          <button type="submit" disabled={loading}>
-            {loading ? "Submitting..." : "Submit"}
-          </button>
-        )}
-      </div>
+      {step === 3 && (
+        <RegistrationDocumentStep
+        nextStep={nextStep}
+        prevStep={prevStep}
+          setDocumentsData={(documentsData) =>
+            setFormData({ ...formData, documentsData })
+          }
+        />
+      )}
+      {step === 3 && (
+        <button type="submit" disabled={loading}>
+          {loading ? "Submitting..." : "Submit"}
+        </button>
+      )}
     </form>
   );
 };

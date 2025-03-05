@@ -1,4 +1,20 @@
-const BasicInfoStep = ({ formData, setFormData }) => {
+import React from "react";
+
+const BasicInfoStep = ({ formData, setFormData, nextStep }) => {
+  const validateBasicInfo = () => {
+    if (!formData.name || !formData.shortname || !formData.address || !formData.representation) {
+      alert("Please fill in all required fields");
+      return false;
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (validateBasicInfo()) {
+      nextStep();
+    }
+  };
+
   return (
     <div className="step-container">
       <h2>Step 1: Basic Information</h2>
@@ -57,6 +73,10 @@ const BasicInfoStep = ({ formData, setFormData }) => {
           <option value="Main">Main</option>
           <option value="Branch">Branch</option>
         </select>
+      </div>
+
+      <div>
+        <button type="button" onClick={handleNext}>Next</button>
       </div>
     </div>
   );

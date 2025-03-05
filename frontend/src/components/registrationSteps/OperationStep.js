@@ -1,7 +1,17 @@
-const OperationStep = ({ formData, setFormData }) => {
-  if (!formData.annual_production) {
-    setFormData({ ...formData, annual_production: [] });
-  }
+import React, { useEffect } from "react";
+
+const OperationStep = ({ formData, setFormData, nextStep, prevStep }) => {
+  // Ensure annual_production is initialized only once when the component first loads
+  useEffect(() => {
+    if (!formData.annual_production || formData.annual_production.length === 0) {
+      setFormData({
+        ...formData,
+        annual_production: [
+          { product: "", type: "", quantity: 0, unit: "", market_value: 0 },
+        ],
+      });
+    }
+  }, [formData, setFormData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -11,11 +21,13 @@ const OperationStep = ({ formData, setFormData }) => {
   const handleOrgChange = (e) => {
     const { value } = e.target;
     if (value === "Others") {
+      // Ensure "Others" is selected and clear the custom field if any.
       setFormData({ ...formData, organization_registration: "Others", other_organization_registration: "" });
     } else {
+      // Set other fields and clear "Others" related data
       setFormData({ ...formData, organization_registration: value, other_organization_registration: undefined });
     }
-    };
+  };
     const handleCustomOrgChange = (e) => {
       setFormData({ ...formData, other_organization_registration: e.target.value });
     };
@@ -76,6 +88,49 @@ const OperationStep = ({ formData, setFormData }) => {
     updatedExperience[index][field] = parseInt(value, 10) || 0;
     setFormData({ ...formData, procurement_experience: updatedExperience });
   };
+
+    // Validation function
+    const validateOperationStep = () => {
+      
+      // Validate date established
+      if (!formData.date_established) {
+        alert("Please select the date established.");
+        return false;
+      }
+  
+      // Validate sponsor agency
+      if (!formData.sponsor_agency) {
+        alert("Please specify the sponsor agency.");
+        return false;
+      }
+  
+      // Validate number of members
+      if (formData.number_of_members?.male < 0 || formData.number_of_members?.female < 0) {
+        alert("Number of members cannot be negative.");
+        return false;
+      }
+  
+      // Validate annual production (all fields should not be empty and quantity/market value should be non-negative)
+      for (let i = 0; i < formData.annual_production.length; i++) {
+        const item = formData.annual_production[i];
+        if (!item.product || !item.type || item.quantity < 0 || item.market_value < 0) {
+          alert("Please fill all production fields correctly and ensure quantities and market values are non-negative.");
+          return false;
+        }
+      }
+  
+      return true;
+    };
+  
+    const handleNext = () => {
+      if (validateOperationStep()) {
+        nextStep(); // Move to the next step
+      }
+    };
+  
+    const handlePrev = () => {
+      prevStep(); // Go to the previous step
+    };  
 
   return (
     <div className="step-container">
@@ -141,6 +196,7 @@ const OperationStep = ({ formData, setFormData }) => {
       </div>    
       
       <div className="form-field">
+
       {/* Annual Production */}
       <label>Annual Production:</label>
       <table>
@@ -167,7 +223,7 @@ const OperationStep = ({ formData, setFormData }) => {
           ))}
         </tbody>
       </table>
-      <button className = "remove-button" type="button" onClick={addProductionEntry}>Add Product</button>
+      <button type="button" onClick={addProductionEntry}>Add Product</button>
       </div>
 
       <div className="form-field">
@@ -226,6 +282,10 @@ const OperationStep = ({ formData, setFormData }) => {
       <div className="form-field">
       <label>Other Sponsor Agency (Optional):</label>
       <input type="text" name="other_sponsor_agency" value={formData.other_sponsor_agency} onChange={handleInputChange} />
+      </div>
+      <div>
+        <button type="button" onClick={handlePrev}>Back</button>
+        <button type="button" onClick={handleNext}>Next</button>
       </div>
     </div>
   );
