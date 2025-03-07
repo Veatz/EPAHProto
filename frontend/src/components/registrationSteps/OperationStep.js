@@ -112,7 +112,14 @@ const OperationStep = ({ formData, setFormData }) => {
       <div className="form-field">
       {/* Date Established */}
       <label>Date Established:</label>
-      <input type="date" name="date_established" value={formData.date_established} onChange={handleInputChange} required />
+      <input 
+      type="date" 
+      name="date_established" 
+      value={formData.date_established} 
+      onChange={handleInputChange}
+      max={new Date().toISOString().split("T")[0]}  
+      required 
+      />
       </div>
 
       <div className="form-field">
