@@ -5,14 +5,20 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 
+//Validate environment variables
+if (!process.env.MONGO_URI || !process.env.PORT) {
+    console.error("❌ Missing required environment variables (MONGO_URI or PORT)");
+    process.exit(1);
+}
+
 // Express app
 const app = express();
 
 app.use(
     cors({
-        origin: "http://localhost:3000", // Allow frontend origin
-        methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
-        allowedHeaders: ["Content-Type"], // Allowed headers
+        origin: process.env.CLIENT_URL || "http://localhost:3000",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type"],
     })
 );
 
@@ -25,15 +31,17 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/api/cbos", cboRoutes); // ✅   name
+app.use("/api/cbo", cboRoutes); 
 
 // Connect to DB
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
         app.listen(process.env.PORT, () => {
-            console.log("Connected to DB and Listening on port", process.env.PORT);
+            console.log(`✅ Connected to DB and listening on port ${process.env.PORT}`);
         });
     })
     .catch((error) => {
-        console.log(error);
+        console.error("❌ Database connection error:", error);
+        process.exit(1); // Exit process if DB fails to connect
     });

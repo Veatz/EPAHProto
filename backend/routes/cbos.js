@@ -1,31 +1,31 @@
-const express = require('express');
-const {
+const express = require("express");
+const { 
   getCBOs, 
   getCBO, 
   createCBO, 
-  deleteCBO,
+  deleteCBO, 
   deleteAllCBOs, 
-  updateCBO
-} = require('../controllers/cboController');
+  updateCBO } = require("../controllers/cboController");
+const { validateCBO,validateCBOUpdate  } = require("../middleware/validation");
 
 const router = express.Router();
 
 // GET all CBOs
-router.get('/', getCBOs);
+router.get("/", getCBOs);
 
 // GET a single CBO
-router.get('/:id', getCBO);
+router.get("/:id", getCBO);
 
-// POST a new CBO
-router.post('/', createCBO); // ✅ Supports Step 2
+// POST a new CBO (with validation)
+router.post("/", validateCBO, createCBO);
 
 // DELETE a CBO
-router.delete('/:id', deleteCBO);
+router.delete("/:id", deleteCBO);
 
-// DELETE ALL CBO
-router.delete ("/", deleteAllCBOs);
+// DELETE ALL CBOs
+router.delete("/", deleteAllCBOs);
 
-// UPDATE a CBO
-router.patch('/:id', updateCBO); // ✅ Supports Step 2 updates
+// UPDATE a CBO (with validation)
+router.patch("/:id", validateCBOUpdate, updateCBO); 
 
 module.exports = router;

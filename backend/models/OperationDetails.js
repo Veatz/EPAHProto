@@ -15,27 +15,39 @@ const OperationDetailsSchema = new mongoose.Schema({
       message: "You must specify an organization type when 'Others' is selected.",
     },
   },
-  date_established: { type: Date, required: true },
+  date_established: { 
+    type: Date, 
+    required: true,
+    validate: {
+      validator: function(value) {
+        return value <= new Date();
+      },
+      message: "Date established cannot be in the future.",
+    },
+  },
+
   psic: { type: String },
   target_members: { type: String },
+  
   number_of_members: {
-    male: { type: Number, default: 0 },
-    female: { type: Number, default: 0 },
+    male: { type: Number, default: 0, min: 0 },
+    female: { type: Number, default: 0, min: 0 },
   },
+
   annual_production: [
     {
       product: { type: String, required: true },
       type: { type: String, required: true },
-      quantity: { type: Number, required: true },
+      quantity: { type: Number, required: true, min: 0 },
       unit: { type: String, required: true },
-      market_value: { type: Number, required: true },
+      market_value: { type: Number, required: true, min: 0 },
     },
   ],
   production_scope: { type: String },
   sales_scope: { type: String },
-  total_assets: { type: Number },
-  total_liabilities: { type: Number },
-  annual_gross_income: { type: Number },
+  total_assets: { type: Number, min: 0 },
+  total_liabilities: { type: Number, min: 0 },
+  annual_gross_income: { type: Number,min: 0},
   procurement_experience: [
     {
       method: { type: String, required: true },

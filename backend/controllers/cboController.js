@@ -20,18 +20,24 @@ const getCBOs = async (req, res) => {
 // Get a single CBO (populate operation details)
 const getCBO = async (req, res) => {
   const { id } = req.params;
+  console.log("🟡 Fetching CBO with ID:", id); // Debug log
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
+    console.log("❌ Invalid ID format:", id);
     return res.status(404).json({ error: "Invalid ID format" });
   }
 
   try {
     const cbo = await CBO.findById(id).populate("operationDetails");
     if (!cbo) {
+      console.log("❌ CBO not found:", id);
       return res.status(404).json({ error: "CBO not found" });
     }
+
+    console.log("✅ CBO found:", cbo);
     res.status(200).json(cbo);
   } catch (error) {
+    console.error("❌ Server error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
@@ -40,10 +46,6 @@ const getCBO = async (req, res) => {
 const createCBO = async (req, res) => {
   try {
     const { name, shortname, description, address, representation, operationDetails } = req.body;
-
-    if (!name || !shortname || !address || !representation || !operationDetails) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
 
     // ✅ Create and save the OperationDetails first
     const newOperationDetails = new OperationDetails(operationDetails);
@@ -61,7 +63,10 @@ const createCBO = async (req, res) => {
 
     const savedCBO = await newCBO.save();
 
-    res.status(201).json({ message: "CBO created successfully", cbo: savedCBO });
+    res.status(201).json({
+      message: "✅ CBO created successfully",
+      cbo: savedCBO,
+    });
   } catch (error) {
     console.error("❌ Error creating CBO:", error);
     res.status(500).json({ error: error.message || "Failed to create CBO" });

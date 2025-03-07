@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const OperationDetailsSchema = require("./OperationDetails"); // ✅ Import schema
 
 const CBOSchema = new mongoose.Schema(
   {
