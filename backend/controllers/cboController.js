@@ -44,35 +44,43 @@ const getCBO = async (req, res) => {
 
 // Create a new CBO with Operation Details
 const createCBO = async (req, res) => {
+  const {
+    name,
+    shortname,
+    description,
+    address,
+    representation,
+    operationDetails,
+    primaryContact,
+    secondaryContact,
+  } = req.body;
+
+  // Handle file uploads (assuming files are uploaded via FormData)
+  const files = {
+    rctResolution: req.files?.rctResolution?.[0]?.path,
+    businessPermit: req.files?.businessPermit?.[0]?.path,
+    doleCertificate: req.files?.doleCertificate?.[0]?.path,
+  };
+
   try {
-    const { name, shortname, description, address, representation, operationDetails } = req.body;
-
-    // ✅ Create and save the OperationDetails first
-    const newOperationDetails = new OperationDetails(operationDetails);
-    const savedOperationDetails = await newOperationDetails.save();
-
-    // ✅ Create and save the CBO with the linked operationDetails ID
     const newCBO = new CBO({
       name,
       shortname,
       description,
       address,
       representation,
-      operationDetails: savedOperationDetails._id, // ✅ Correctly reference the ObjectId
+      operationDetails,
+      primaryContact,
+      secondaryContact,
+      files,
     });
 
     const savedCBO = await newCBO.save();
-
-    res.status(201).json({
-      message: "✅ CBO created successfully",
-      cbo: savedCBO,
-    });
+    res.status(201).json(savedCBO);
   } catch (error) {
-    console.error("❌ Error creating CBO:", error);
-    res.status(500).json({ error: error.message || "Failed to create CBO" });
+    res.status(500).json({ error: error.message });
   }
 };
-
 
 // Delete a CBO and its operation details
 const deleteCBO = async (req, res) => {

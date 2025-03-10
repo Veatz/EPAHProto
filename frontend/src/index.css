@@ -262,6 +262,17 @@ html, body {
   margin-bottom: 20px;
 }
 
+/* File Upload Step */
+.file-upload-step input[type="file"] {
+  margin-top: 0.5rem;
+}
+
+.file-upload-step .error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
 .form-field label {
   font-family: Arial, sans-serif;
   font-size: 1rem;

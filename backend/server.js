@@ -13,6 +13,10 @@ if (!process.env.MONGO_URI || !process.env.PORT) {
 
 // Express app
 const app = express();
+const path = require("path");
+
+// Serve static files from the 'uploads' directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(
     cors({

@@ -3,13 +3,30 @@ import React from "react";
 const FileUploadStep = ({ formData, setFormData, errors }) => {
   const handleFileChange = (e, fileType) => {
     const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      files: {
-        ...formData.files,
-        [fileType]: file,
-      },
-    });
+    if (file) {
+      // Validate file type
+      const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        alert("Invalid file type. Please upload a PDF, JPEG, or PNG file.");
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        alert("File size exceeds the limit of 5MB.");
+        return;
+      }
+
+      // Update formData with the selected file
+      setFormData({
+        ...formData,
+        files: {
+          ...formData.files,
+          [fileType]: file,
+        },
+      });
+    }
   };
 
   return (

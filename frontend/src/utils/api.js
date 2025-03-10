@@ -2,30 +2,40 @@ const BASE_URL = "http://localhost:4000/api"; // ✅ Centralized API base URL
 
 // Register a new CBO (POST)
 export const registerCBO = async (formData) => {
-  try {
-    console.log("Sending API request with:", JSON.stringify(formData, null, 2));
+  let body;
+  let headers = {};
 
-    const response = await fetch(`${BASE_URL}/cbos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("API Response Error:", response.status, errorText);
-      throw new Error(`Failed to register CBO: ${response.status} - ${errorText}`);
+  if (formData.files && Object.keys(formData.files).length > 0) {
+    // Use FormData when uploading files
+    body = new FormData();
+    for (const key in formData) {
+      if (key === "files") {
+        for (const file of formData.files) {
+          body.append("files", file); // Append each file correctly
+        }
+      } else {
+        body.append(key, formData[key]);
+      }
     }
-
-    const data = await response.json();
-    console.log("API Response Data:", data);
-    return data;
-  } catch (error) {
-    console.error("Error in API call:", error);
-    throw error;
+  } else {
+    // Use JSON when no files are included
+    body = JSON.stringify(formData);
+    headers["Content-Type"] = "application/json";
   }
-};
 
+  const response = await fetch(`${BASE_URL}/cbos`, {
+    method: "POST",
+    headers, // Dynamically set headers
+    body,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to register CBO: ${errorText}`);
+  }
+
+  return await response.json();
+};
 // Get all CBOs (GET)
 export const getCBOs = async () => {
   try {

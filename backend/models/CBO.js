@@ -31,7 +31,26 @@ const CBOSchema = new mongoose.Schema(
     operationDetails: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "OperationDetails" 
-    }
+    },
+    primaryContact: {
+      name: { type: String, required: true },
+      designation: { type: String },
+      email: { type: String, required: true },
+      telephone: { type: String },
+      mobile: { type: String },
+    },
+    secondaryContact: {
+      name: { type: String },
+      designation: { type: String },
+      email: { type: String },
+      telephone: { type: String },
+      mobile: { type: String },
+    },
+    files: {
+      rctResolution: { type: String }, // Store file path or URL
+      businessPermit: { type: String },
+      doleCertificate: { type: String },
+    },
     },
   { timestamps: true }
 );
