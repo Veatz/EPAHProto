@@ -1,31 +1,43 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext, useMemo } from "react";
 
-export const CBOContext = createContext(); // ✅ Export CBOContext
+export const CBOContext = createContext();
 
 export const cboReducer = (state, action) => {
   switch (action.type) {
     case "SET_CBOS":
-      return { cbos: action.payload };
+      return { ...state, cbos: action.payload, isLoading: false };
     case "CREATE_CBO":
-      return { cbos: [action.payload, ...state.cbos] };
+      return { ...state, cbos: [action.payload, ...state.cbos] };
     case "DELETE_CBO":
-      return { cbos: state.cbos.filter((cbo) => cbo._id !== action.payload) };
+      return { ...state, cbos: state.cbos.filter((cbo) => cbo._id !== action.payload) };
+    case "UPDATE_CBO":
+      return {
+        ...state,
+        cbos: state.cbos.map((cbo) =>
+          cbo._id === action.payload._id ? action.payload : cbo
+        ),
+      };
+    case "FETCH_CBOS_REQUEST":
+      return { ...state, isLoading: true };
+    case "FETCH_CBOS_FAILURE":
+      return { ...state, isLoading: false, error: action.payload };
     default:
       return state;
   }
 };
 
 export const CBOContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cboReducer, { cbos: [] });
+  const [state, dispatch] = useReducer(cboReducer, {
+    cbos: [],
+    isLoading: false,
+    error: null,
+  });
 
-  return (
-    <CBOContext.Provider value={{ ...state, dispatch }}>
-      {children}
-    </CBOContext.Provider>
-  );
+  const value = useMemo(() => ({ ...state, dispatch }), [state, dispatch]);
+
+  return <CBOContext.Provider value={value}>{children}</CBOContext.Provider>;
 };
 
-// Custom hook to use CBOContext
 export const useCBOContext = () => {
   const context = useContext(CBOContext);
   if (!context) {

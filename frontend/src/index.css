@@ -222,6 +222,18 @@ html, body {
   margin: 0;
 }
 
+/* Step 3: Contact Step */
+.contact-step h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #10561A;
+}
+
+/* Step 4: File Upload Step */
+.file-upload-step input[type="file"] {
+  margin-top: 0.5rem;
+}
+
 /* Make the step-container fill the page */
 .step-container {
   background-color: white;

@@ -16,6 +16,7 @@ const CBOSchema = new mongoose.Schema(
       type: String,
       required: false,
       trim: true,
+      default: "",
     },
     address: {
       type: String,
@@ -34,5 +35,8 @@ const CBOSchema = new mongoose.Schema(
     },
   { timestamps: true }
 );
+
+CBOSchema.index({ name: 1 });
+CBOSchema.index({ shortname: 1 });
 
 module.exports = mongoose.model("CBO", CBOSchema);

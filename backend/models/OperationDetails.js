@@ -26,7 +26,11 @@ const OperationDetailsSchema = new mongoose.Schema({
     },
   },
 
-  psic: { type: String },
+  psic: {
+    type: String, 
+    default: "",
+  },
+
   target_members: { type: String },
   
   number_of_members: {
@@ -57,7 +61,9 @@ const OperationDetailsSchema = new mongoose.Schema({
     }
   ],
   sponsor_agency: { type: String, required: true },
-  other_sponsor_agency: { type: String },
+  other_sponsor_agency: { type: String ,default: ""},
 });
+
+OperationDetailsSchema.index({ date_established: -1 });
 
 module.exports = mongoose.model("OperationDetails", OperationDetailsSchema);
