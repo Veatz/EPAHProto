@@ -29,9 +29,10 @@ const CBOSchema = new mongoose.Schema(
       required: true,
     },
     operationDetails: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "OperationDetails" 
-    },
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "OperationDetails", 
+      required: true },
+
     primaryContact: {
       name: { type: String, required: true },
       designation: { type: String },

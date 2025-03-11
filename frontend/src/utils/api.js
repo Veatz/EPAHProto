@@ -2,31 +2,26 @@ const BASE_URL = "http://localhost:4000/api"; // ✅ Centralized API base URL
 
 // Register a new CBO (POST)
 export const registerCBO = async (formData) => {
-  let body;
-  let headers = {};
+  let body = new FormData();
 
-  if (formData.files && Object.keys(formData.files).length > 0) {
-    // Use FormData when uploading files
-    body = new FormData();
-    for (const key in formData) {
-      if (key === "files") {
-        for (const file of formData.files) {
-          body.append("files", file); // Append each file correctly
+  for (const key in formData) {
+    if (key === "files") {
+      for (const fileKey in formData.files) {
+        if (formData.files[fileKey] instanceof File) {
+          body.append("files", formData.files[fileKey]); // ✅ Append files correctly
         }
-      } else {
-        body.append(key, formData[key]);
       }
+    } else if (typeof formData[key] === "object") {
+      body.append(key, JSON.stringify(formData[key])); // ✅ Convert objects to JSON
+    } else {
+      body.append(key, formData[key]);
     }
-  } else {
-    // Use JSON when no files are included
-    body = JSON.stringify(formData);
-    headers["Content-Type"] = "application/json";
   }
 
+  // ✅ Do NOT set Content-Type manually for FormData
   const response = await fetch(`${BASE_URL}/cbos`, {
     method: "POST",
-    headers, // Dynamically set headers
-    body,
+    body, // Let the browser set headers
   });
 
   if (!response.ok) {
@@ -36,6 +31,7 @@ export const registerCBO = async (formData) => {
 
   return await response.json();
 };
+
 // Get all CBOs (GET)
 export const getCBOs = async () => {
   try {

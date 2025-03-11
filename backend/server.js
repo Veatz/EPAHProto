@@ -28,6 +28,7 @@ app.use(
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // ✅ Enables FormData parsing
 app.use((req, res, next) => {
     console.log(req.method, req.path); // ✅ Debugging
     next();

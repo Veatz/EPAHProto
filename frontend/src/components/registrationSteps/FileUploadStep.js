@@ -19,13 +19,13 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
       }
 
       // Update formData with the selected file
-      setFormData({
-        ...formData,
+      setFormData((prevData) => ({
+        ...prevData,
         files: {
-          ...formData.files,
-          [fileType]: file,
+          ...prevData.files,
+          [fileType]: file instanceof File ? file : null,  // ✅ Ensure only valid files are stored
         },
-      });
+      }));
     }
   };
 

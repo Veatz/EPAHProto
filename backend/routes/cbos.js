@@ -19,7 +19,7 @@ router.get("/", getCBOs);
 router.get("/:id", getCBO);
 
 // POST a new CBO (with validation)
-router.post("/", validateCBO, createCBO);
+router.post("/", upload.any(), createCBO);
 
 // DELETE a CBO
 router.delete("/:id", deleteCBO);
@@ -29,16 +29,5 @@ router.delete("/", deleteAllCBOs);
 
 // UPDATE a CBO (with validation)
 router.patch("/:id", validateCBOUpdate, updateCBO); 
-
-// Route to create a new CBO with file uploads
-router.post(
-  "/",
-  upload.fields([
-    { name: "rctResolution", maxCount: 1 },
-    { name: "businessPermit", maxCount: 1 },
-    { name: "doleCertificate", maxCount: 1 },
-  ]),
-  cboController.createCBO
-);
 
 module.exports = router;

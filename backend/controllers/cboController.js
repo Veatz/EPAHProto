@@ -44,37 +44,44 @@ const getCBO = async (req, res) => {
 
 // Create a new CBO with Operation Details
 const createCBO = async (req, res) => {
-  const {
+  console.log("🟢 Received Request Body:", req.body);
+  console.log("🟢 Received Files:", req.files);
+  
+  const { name, shortname, description, address, representation } = req.body;
+
+  let operationDetails, primaryContact, secondaryContact;
+  
+  try {
+    operationDetails = req.body.operationDetails ? JSON.parse(req.body.operationDetails) : {};
+    primaryContact = req.body.primaryContact ? JSON.parse(req.body.primaryContact) : {};
+    secondaryContact = req.body.secondaryContact ? JSON.parse(req.body.secondaryContact) : {};
+  } catch (error) {
+    return res.status(400).json({ error: "Invalid JSON format in request body" });
+  }
+  
+  // Create OperationDetails document separately
+  const newOperationDetails = new OperationDetails(operationDetails);
+
+try {
+  const savedOperationDetails = await newOperationDetails.save(); // ✅ Save to database
+  console.log("✅ Saved OperationDetails:", savedOperationDetails);
+
+  // Create new CBO with operation details reference
+  const newCBO = new CBO({
     name,
     shortname,
     description,
     address,
     representation,
-    operationDetails,
+    operationDetails: savedOperationDetails._id, // ✅ Save ObjectId reference
     primaryContact,
     secondaryContact,
-  } = req.body;
-
-  // Handle file uploads (assuming files are uploaded via FormData)
-  const files = {
-    rctResolution: req.files?.rctResolution?.[0]?.path,
-    businessPermit: req.files?.businessPermit?.[0]?.path,
-    doleCertificate: req.files?.doleCertificate?.[0]?.path,
-  };
-
-  try {
-    const newCBO = new CBO({
-      name,
-      shortname,
-      description,
-      address,
-      representation,
-      operationDetails,
-      primaryContact,
-      secondaryContact,
-      files,
-    });
-
+    files: {
+      rctResolution: req.files[0] ? req.files[0].path : null,
+      businessPermit: req.files[1] ? req.files[1].path : null,
+      doleCertificate: req.files[2] ? req.files[2].path : null,
+    },
+  });
     const savedCBO = await newCBO.save();
     res.status(201).json(savedCBO);
   } catch (error) {

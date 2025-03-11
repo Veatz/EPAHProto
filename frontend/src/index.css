@@ -86,6 +86,7 @@ header .logo-link h1 {
 
 .home .register-button:hover {
   background-color: #23BD39;
+  border-radius: 20px;
 }
 
 .cbo-cards-container {
