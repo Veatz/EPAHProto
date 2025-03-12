@@ -48,9 +48,115 @@ const CBOSchema = new mongoose.Schema(
       mobile: { type: String },
     },
     files: {
-      rctResolution: { type: String }, // Store file path or URL
-      businessPermit: { type: String },
-      doleCertificate: { type: String },
+      // Legal Requirements
+      rctResolution: { type: String },
+      dti: {
+        file: { type: String },
+        territorialScope: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      sec: {
+        file: { type: String },
+        typeOfRegistration: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      cda: {
+        file: { type: String },
+        typeOfCooperative: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      csoNpoNgoPo: {
+        file: { type: String },
+        agencyIssuer: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      doleRule1020: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+    
+      // Financial Requirements
+      bankBook: { type: String },
+      auditedFinancialStatement: {
+        file: { type: String },
+        year: { type: Number },
+      },
+      latestITR: {
+        file: { type: String },
+        year: { type: Number },
+      },
+      salesInvoice: { type: String },
+    
+      // Additional Registration/Accreditations
+      businessPermit: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      ffeDis: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      birRegistration: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      rsbsa: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      fishAr: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      fda: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      agrarianReformBeneficiaries: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      farmersAssociation: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      irrigatorsAssociation: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      laborUnionsWorkersAssoc: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
     },
     },
   { timestamps: true }

@@ -53,8 +53,25 @@ const RegistrationForm = () => {
   // Step 4: File Upload
   files: {
     rctResolution: null,
-    businessPermit: null,
-    doleCertificate: null,
+    dti: { file: null, territorialScope: "", dateOfIssuance: "", dateOfValidity: "" },
+    sec: { file: null, typeOfRegistration: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    cda: { file: null, typeOfCooperative: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    csoNpoNgoPo: { file: null, agencyIssuer: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    doleRule1020: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    bankBook: null,
+    auditedFinancialStatement: { file: null, year: "" },
+    latestITR: { file: null, year: "" },
+    salesInvoice: null,
+    businessPermit: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    ffeDis: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    birRegistration: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    rsbsa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    fishAr: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    fda: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    agrarianReformBeneficiaries: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    farmersAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    irrigatorsAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    laborUnionsWorkersAssoc: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
   },
 });
 

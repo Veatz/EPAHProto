@@ -231,8 +231,62 @@ html, body {
 }
 
 /* Step 4: File Upload Step */
-.file-upload-step input[type="file"] {
-  margin-top: 0.5rem;
+
+.form-table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.form-row {
+  display: table-row;
+  border-bottom: 1px solid #ddd;
+}
+
+.form-title-row {
+  display: table-cell;
+  width: 30%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #f4f4f4;
+  text-align: left;
+}
+
+.form-inputs {
+  display: table-cell;
+  width: 70%;
+  padding: 10px;
+}
+
+.file-input {
+  width: 100%;
+  padding: 8px;
+}
+
+.subfields-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subfield-container {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.subfield-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.subfield-input {
+  padding: 8px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 /* Make the step-container fill the page */
@@ -267,6 +321,8 @@ html, body {
 .file-upload-step input[type="file"] {
   margin-top: 0.5rem;
 }
+
+/**/
 
 .file-upload-step .error {
   color: red;
