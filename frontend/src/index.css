@@ -246,7 +246,7 @@ html, body {
 .form-title-row {
   display: table-cell;
   width: 30%;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: bold;
   padding: 10px;
   background-color: #f4f4f4;
@@ -278,7 +278,7 @@ html, body {
 
 .subfield-label {
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 3px;
 }
 
@@ -306,6 +306,14 @@ html, body {
   font-family: Poppins, sans-serif;
   font-size: 1.8rem;
   font-weight: 600;
+  color: #10561A;
+  margin-bottom: 20px;
+}
+
+.step-container h3 {
+  font-family: Poppins, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
   color: #10561A;
   margin-bottom: 20px;
 }

@@ -32,22 +32,28 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
 
   const labels = {
     rctResolution: "RCT Resolution",
-    dti: "DTI Registration",
-    sec: "SEC Registration",
-    cda: "CDA Registration",
-    csoNpoNgoPo: "CSO/NPO/NGO/PO Registration",
-    doleRule1020: "DOLE Rule 1020 Registration",
-    bankBook: "Bank Book",
-    auditedFinancialStatement: "Audited Financial Statement",
-    latestITR: "Latest ITR",
+    dti: "Department of Trade and Industry (DTI)",
+    sec: "Securities and Exchange Commission (SEC)",
+    cda: "Cooperative Development Authority (CDA)",
+    csoNpoNgoPo: (
+      <>
+        Civil Society Organization (CSO) <br />
+        Non-Government Organization (NGO) <br />
+        People's Organization (PO)
+      </>
+    ),
+    doleRule1020: "Department of Labor and Employment (DOLE) Registration under Rule 1020",
+    bankBook: "Bank Book/Books of Account",
+    auditedFinancialStatement: "Updated / Audited Financial Statement",
+    latestITR: "Latest Income Tax Return (ITR)",
     salesInvoice: "Sales Invoice",
-    businessPermit: "Business Permit",
-    ffeDis: "FFEDIS Registration",
+    businessPermit: "Business Permit (Mayor's Permit)",
+    ffeDis: "Farmers and Fisherfolk Enterprise Development Information System (FFEDIS)",
     birRegistration: "BIR Registration",
-    rsbsa: "RSBSA Registration",
-    fishAr: "FISH-AR Registration",
-    fda: "FDA Registration",
-    agrarianReformBeneficiaries: "Agrarian Reform Beneficiaries",
+    rsbsa: "Registry System for Basic Sectors in Agriculture (RSBSA)",
+    fishAr: "Fisherfolk Registration (FISH-AR)",
+    fda: "Food and Drug Administration (FDA)",
+    agrarianReformBeneficiaries: "Agrarian Reform Beneficiaries Organizations",
     farmersAssociation: "Farmer's Association",
     irrigatorsAssociation: "Irrigators Association",
     laborUnionsWorkersAssoc: "Labor Unions and Workers' Association",
@@ -66,7 +72,7 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
 
   return (
     <div className="step-container">
-      <h2>Step 4: File Upload</h2>
+      <h2>Step 4: Legal Documents</h2>
       {Object.keys(sections).map((section) => (
         <div key={section} className="form-section">
           <h3 className="section-title">{section}</h3>

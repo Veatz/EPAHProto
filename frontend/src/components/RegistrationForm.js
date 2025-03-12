@@ -72,6 +72,7 @@ const RegistrationForm = () => {
     farmersAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
     irrigatorsAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
     laborUnionsWorkersAssoc: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    slpa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
   },
 });
 
@@ -141,7 +142,46 @@ const prevStep = () => setStep(step - 1);
           sponsor_agency: "",
           other_sponsor_agency: "",
         },
-      });
+          // Step 3: Contact Persons
+  primaryContact: {
+    name: "",
+    designation: "",
+    email: "",
+    telephone: "",
+    mobile: "",
+  },
+  secondaryContact: {
+    name: "",
+    designation: "",
+    email: "",
+    telephone: "",
+    mobile: "",
+  },
+  // Step 4: File Upload
+  files: {
+    rctResolution: null,
+    dti: { file: null, territorialScope: "", dateOfIssuance: "", dateOfValidity: "" },
+    sec: { file: null, typeOfRegistration: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    cda: { file: null, typeOfCooperative: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    csoNpoNgoPo: { file: null, agencyIssuer: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    doleRule1020: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    bankBook: null,
+    auditedFinancialStatement: { file: null, year: "" },
+    latestITR: { file: null, year: "" },
+    salesInvoice: null,
+    businessPermit: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    ffeDis: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    birRegistration: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    rsbsa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    fishAr: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    fda: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    agrarianReformBeneficiaries: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    farmersAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    irrigatorsAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    laborUnionsWorkersAssoc: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+    slpa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+  },
+});
     } catch (error) {
       console.error("Error registering CBO:", error);
       alert("Registration Failed. Please try again.");
