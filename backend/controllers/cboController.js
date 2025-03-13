@@ -99,7 +99,15 @@ const deleteCBO = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
+// Delete all CBO
+const deleteAllCBOs = async (req, res) => {
+  try {
+    await CBO.deleteMany({});
+    res.status(200).json({ message: "All CBOs deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
 // Update a CBO and its operation details
 const updateCBO = async (req, res) => {
   const { id } = req.params;
@@ -138,4 +146,4 @@ const updateCBO = async (req, res) => {
   }
 };
 
-module.exports = { getCBOs, getCBO, createCBO, deleteCBO, updateCBO };
+module.exports = { getCBOs, getCBO, createCBO, deleteCBO, updateCBO, deleteAllCBOs };

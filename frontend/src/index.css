@@ -223,6 +223,92 @@ html, body {
   margin: 0;
 }
 
+/* Step 2: Operation Step */
+td {
+  vertical-align: middle;
+}
+
+td input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+/* Annual Production Table Styles */
+.annual-production-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.annual-production-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.annual-production-table th, .annual-production-table td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.annual-production-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  text-align: center;
+}
+
+.annual-production-table td input {
+  width: 100%;
+  padding: 4px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+}
+
+.annual-production-table td input:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+
+/* Button styling for add and remove */
+.add-product-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: block;
+  margin: 10px auto;
+  width: 100%;
+  font-weight: bold;
+}
+
+.add-product-btn:hover {
+  background-color: #218838;
+}
+
+.remove-product-btn {
+  background-color: #dc3545; /* Red color */
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: block;
+  margin: 10px auto;
+  width: 60%;
+  font-weight: bold;
+}
+
+.remove-product-btn:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
 /* Step 3: Contact Step */
 .contact-step h3 {
   font-size: 1.5rem;
@@ -259,9 +345,25 @@ html, body {
   padding: 10px;
 }
 
+.file-upload-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 250px; /* Adjust width as needed */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #f9f9f9;
+  overflow: hidden; /* Prevents overflow */
+  margin: 10px;
+  margin-left: 0px;
+}
+
 .file-input {
   width: 100%;
-  padding: 8px;
+  max-width: 200px; /* Limit file input size */
+  padding: 5px;
+  font-size: 0.9rem;
 }
 
 .subfields-vertical {

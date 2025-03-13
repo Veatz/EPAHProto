@@ -115,6 +115,12 @@ const CBOSchema = new mongoose.Schema(
         dateOfIssuance: { type: Date },
         dateOfValidity: { type: Date },
       },
+      philGeps: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
       rsbsa: {
         file: { type: String },
         registryNo: { type: String },
@@ -152,6 +158,12 @@ const CBOSchema = new mongoose.Schema(
         dateOfValidity: { type: Date },
       },
       laborUnionsWorkersAssoc: {
+        file: { type: String },
+        registryNo: { type: String },
+        dateOfIssuance: { type: Date },
+        dateOfValidity: { type: Date },
+      },
+      slpa: {
         file: { type: String },
         registryNo: { type: String },
         dateOfIssuance: { type: Date },

@@ -50,6 +50,7 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
     businessPermit: "Business Permit (Mayor's Permit)",
     ffeDis: "Farmers and Fisherfolk Enterprise Development Information System (FFEDIS)",
     birRegistration: "BIR Registration",
+    philGeps: "Philippine Government Electronic Procurement (PhilGEPS)",
     rsbsa: "Registry System for Basic Sectors in Agriculture (RSBSA)",
     fishAr: "Fisherfolk Registration (FISH-AR)",
     fda: "Food and Drug Administration (FDA)",
@@ -57,6 +58,7 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
     farmersAssociation: "Farmer's Association",
     irrigatorsAssociation: "Irrigators Association",
     laborUnionsWorkersAssoc: "Labor Unions and Workers' Association",
+    slpa: "Sustainable Livelihood Program Associations",
   };
 
   const subFieldLabels = {
@@ -81,31 +83,38 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
               <div key={field} className="form-row">
                 <div className="form-title-row">{labels[field]}</div>
                 <div className="form-inputs">
-                  <input
-                    type="file"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={(e) => handleFileChange(e, field)}
-                    className="file-input"
-                  />
-                  {formData.files[field]?.file && (
+                <div className="file-upload-container">
+                <input
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(e) => handleFileChange(e, field)}
+                  className="file-input"
+                />
+                </div>
+                                {formData.files[field]?.file && (
                     <div className="form-field">
-                      {Object.keys(formData.files[field]).map(
-                        (subField) =>
-                          subField !== "file" && (
-                            <div key={subField} className="subfield-container">
-                              <label className="subfield-label">
-                                {subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
-                              </label>
-                              <input
-                                type="text"
-                                className="subfield-input"
-                                placeholder={subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
-                                value={formData.files[field][subField]}
-                                onChange={(e) => handleInputChange(e, field, subField)}
-                              />
-                            </div>
-                          )
-                      )}
+                      {Object.keys(formData.files[field]).map((subField) => {
+                        if (subField === "file") return null; // Skip file field
+
+                        let inputType = "text"; // Default input type
+                        if (subField.includes("date")) inputType = "date"; // Date fields
+                        else if (subField.includes("year") || subField.includes("registryNo")) inputType = "number"; // Number fields
+
+                        return (
+                          <div key={subField} className="subfield-container">
+                            <label className="subfield-label">
+                              {subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
+                            </label>
+                            <input
+                              type={inputType}
+                              className="subfield-input"
+                              placeholder={subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
+                              value={formData.files[field][subField]}
+                              onChange={(e) => handleInputChange(e, field, subField)}
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
