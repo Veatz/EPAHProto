@@ -75,6 +75,9 @@ const OperationStep = ({ formData, setFormData, errors }) => {
     const updatedProduction = formData.operationDetails.annual_production.filter(
       (_, i) => i !== index
     );
+    if (updatedProduction.length === 0) {
+      updatedProduction.push({ product: "", type: "", quantity: 0, unit: "", market_value: 0 });
+    }
     setFormData({
       ...formData,
       operationDetails: {

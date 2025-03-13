@@ -25,7 +25,9 @@ const RegistrationForm = () => {
       psic: "",
       target_members: "",
       number_of_members: { male: 0, female: 0 },
-      annual_production: [],
+      annual_production: [
+        { product: "", type: "", quantity: 0, unit: "", market_value: 0 }
+      ],
       production_scope: "",
       sales_scope: "",
       total_assets: 0,
