@@ -1,6 +1,6 @@
 import React from "react";
 
-const FileUploadStep = ({ formData, setFormData, errors }) => {
+const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading }) => {
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
     if (file) {
@@ -27,7 +27,7 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
   const sections = {
     "Legal Requirements": ["rctResolution", "dti", "sec", "cda", "csoNpoNgoPo", "doleRule1020"],
     "Financial Requirements": ["bankBook", "auditedFinancialStatement", "latestITR", "salesInvoice"],
-    "Additional Registration/Accreditations": ["businessPermit", "ffeDis", "birRegistration", "rsbsa", "fishAr", "fda", "agrarianReformBeneficiaries", "farmersAssociation", "irrigatorsAssociation", "laborUnionsWorkersAssoc"],
+    "Additional Registration/Accreditations": ["businessPermit", "ffeDis", "birRegistration","philGeps", "rsbsa", "fishAr", "fda", "agrarianReformBeneficiaries", "farmersAssociation", "irrigatorsAssociation", "laborUnionsWorkersAssoc", "slpa"],
   };
 
   const labels = {
@@ -43,7 +43,7 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
       </>
     ),
     doleRule1020: "Department of Labor and Employment (DOLE) Registration under Rule 1020",
-    bankBook: "Bank Book/Books of Account",
+    bankBook: "Bank Book / Books of Account",
     auditedFinancialStatement: "Updated / Audited Financial Statement",
     latestITR: "Latest Income Tax Return (ITR)",
     salesInvoice: "Sales Invoice",
@@ -91,7 +91,7 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
                   className="file-input"
                 />
                 </div>
-                                {formData.files[field]?.file && (
+                    {formData.files[field]?.file && (
                     <div className="form-field">
                       {Object.keys(formData.files[field]).map((subField) => {
                         if (subField === "file") return null; // Skip file field
@@ -123,6 +123,10 @@ const FileUploadStep = ({ formData, setFormData, errors }) => {
           </div>
         </div>
       ))}
+      <div className="step-nav">
+        <button type="button" className="back-btn" onClick={prevStep}>Back</button>
+        <button type="submit" className="submit-btn" disabled={loading}>{loading ? "Submitting..." : "Submit"}</button>
+      </div>
     </div>
   );
 };

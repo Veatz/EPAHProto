@@ -1,6 +1,6 @@
 import React from "react";
 
-const ContactStep = ({ formData, setFormData, errors }) => {
+const ContactStep = ({ formData, setFormData, nextStep, prevStep,errors }) => {
   const handleInputChange = (e, contactType) => {
     const { name, value } = e.target;
     setFormData({
@@ -104,6 +104,10 @@ const ContactStep = ({ formData, setFormData, errors }) => {
           value={formData.secondaryContact.mobile}
           onChange={(e) => handleInputChange(e, "secondaryContact")}
         />
+      </div>
+      <div className="step-nav">
+        <button type="button" className="back-btn" onClick={prevStep}>Back</button>
+        <button type="button" className="next-btn" onClick={nextStep}>Next</button>
       </div>
     </div>
   );

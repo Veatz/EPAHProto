@@ -1,4 +1,4 @@
-const BasicInfoStep = ({ formData, setFormData }) => {
+const BasicInfoStep = ({ formData, setFormData, nextStep }) => {
   return (
     <div className="step-container">
       <h2>Step 1: Basic Information</h2>
@@ -57,6 +57,9 @@ const BasicInfoStep = ({ formData, setFormData }) => {
           <option value="Main">Main</option>
           <option value="Branch">Branch</option>
         </select>
+      </div>
+      <div className="step-nav" style={{ display: "flex", justifyContent: "flex-end" }}>
+        <button type="button" className="next-btn" onClick={nextStep}>Next</button>
       </div>
     </div>
   );

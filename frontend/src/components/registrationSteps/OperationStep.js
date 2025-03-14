@@ -1,6 +1,6 @@
 import React from "react";
 
-const OperationStep = ({ formData, setFormData, errors }) => {
+const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -465,6 +465,10 @@ const OperationStep = ({ formData, setFormData, errors }) => {
           value={formData.operationDetails.other_sponsor_agency}
           onChange={handleInputChange}
         />
+      </div>
+      <div className="step-nav">
+        <button type="button" className="back-btn" onClick={prevStep}>Back</button>
+        <button type="button" className="next-btn" onClick={nextStep}>Next</button>
       </div>
     </div>
   );

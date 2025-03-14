@@ -7,8 +7,8 @@ const NavBar = () => {
       <div className="container">
         <Link to="/" className="logo-link">
           <img src={logo} alt="Logo" className="logo-img" />
-          <h1>EPAHP Digital Mapping System</h1>
         </Link>
+        <h1>EPAHP Digital Mapping System</h1>
       </div>
     </header>
   );

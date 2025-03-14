@@ -9,8 +9,8 @@ import { useCBOContext } from "../context/CBOcontext";
 const RegistrationForm = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({}); // Track validation errors
-  const { dispatch } = useCBOContext(); // Use context to update CBO list
+  const [errors, setErrors] = useState({});
+  const { dispatch } = useCBOContext();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -80,7 +80,7 @@ const RegistrationForm = () => {
 });
 
 const validateStep = () => {
-  const newErrors = {};
+  let newErrors = {};
   if (step === 1) {
     if (!formData.name) newErrors.name = "Name is required";
     if (!formData.shortname) newErrors.shortname = "Short name is required";
@@ -98,8 +98,6 @@ const validateStep = () => {
   }
   if (step === 4) {
     if (!formData.files.rctResolution) newErrors.rctResolution = "RCT Resolution is required";
-    if (!formData.files.businessPermit) newErrors.businessPermit = "Business Permit is required";
-    if (!formData.files.doleCertificate) newErrors.doleCertificate = "DOLE Certificate is required";
   }
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
@@ -146,46 +144,46 @@ const prevStep = () => setStep(step - 1);
           other_sponsor_agency: "",
         },
           // Step 3: Contact Persons
-  primaryContact: {
-    name: "",
-    designation: "",
-    email: "",
-    telephone: "",
-    mobile: "",
-  },
-  secondaryContact: {
-    name: "",
-    designation: "",
-    email: "",
-    telephone: "",
-    mobile: "",
-  },
+        primaryContact: {
+          name: "",
+          designation: "",
+          email: "",
+          telephone: "",
+          mobile: "",
+        },
+        secondaryContact: {
+          name: "",
+          designation: "",
+          email: "",
+          telephone: "",
+          mobile: "",
+        },
   // Step 4: File Upload
-  files: {
-    rctResolution: null,
-    dti: { file: null, territorialScope: "", dateOfIssuance: "", dateOfValidity: "" },
-    sec: { file: null, typeOfRegistration: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    cda: { file: null, typeOfCooperative: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    csoNpoNgoPo: { file: null, agencyIssuer: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    doleRule1020: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    bankBook: null,
-    auditedFinancialStatement: { file: null, year: "" },
-    latestITR: { file: null, year: "" },
-    salesInvoice: null,
-    businessPermit: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    ffeDis: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    birRegistration: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    philGeps: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    rsbsa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    fishAr: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    fda: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    agrarianReformBeneficiaries: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    farmersAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    irrigatorsAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    laborUnionsWorkersAssoc: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-    slpa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
-  },
-});
+        files: {
+          rctResolution: null,
+          dti: { file: null, territorialScope: "", dateOfIssuance: "", dateOfValidity: "" },
+          sec: { file: null, typeOfRegistration: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          cda: { file: null, typeOfCooperative: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          csoNpoNgoPo: { file: null, agencyIssuer: "", registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          doleRule1020: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          bankBook: null,
+          auditedFinancialStatement: { file: null, year: "" },
+          latestITR: { file: null, year: "" },
+          salesInvoice: null,
+          businessPermit: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          ffeDis: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          birRegistration: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          philGeps: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          rsbsa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          fishAr: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          fda: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          agrarianReformBeneficiaries: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          farmersAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          irrigatorsAssociation: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          laborUnionsWorkersAssoc: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+          slpa: { file: null, registryNo: "", dateOfIssuance: "", dateOfValidity: "" },
+        },
+      });   
     } catch (error) {
       console.error("Error registering CBO:", error);
       alert("Registration Failed. Please try again.");
@@ -196,16 +194,10 @@ const prevStep = () => setStep(step - 1);
 
   return (
     <form onSubmit={handleSubmit}>
-      {step === 1 && <BasicInfoStep formData={formData} setFormData={setFormData} errors={errors} />}
-      {step === 2 && <OperationStep formData={formData} setFormData={setFormData} errors={errors} />}
-      {step === 3 && <ContactStep formData={formData} setFormData={setFormData} errors={errors} />}
-      {step === 4 && <FileUploadStep formData={formData} setFormData={setFormData} errors={errors} />}
-
-      <div className="step-nav">
-        {step > 1 && <button type="button" onClick={prevStep}>Back</button>}
-        {step < 4 && <button type="button" onClick={nextStep}>Next</button>}
-        {step === 4 && <button type="submit" disabled={loading}>{loading ? "Submitting..." : "Submit"}</button>}
-      </div>
+      {step === 1 && <BasicInfoStep formData={formData} setFormData={setFormData} errors={errors} nextStep={nextStep} />}
+      {step === 2 && <OperationStep formData={formData} setFormData={setFormData} errors={errors} nextStep={nextStep} prevStep={prevStep} />}
+      {step === 3 && <ContactStep formData={formData} setFormData={setFormData} errors={errors} nextStep={nextStep} prevStep={prevStep} />}
+      {step === 4 && <FileUploadStep formData={formData} setFormData={setFormData} errors={errors} prevStep={prevStep} handleSubmit={handleSubmit} loading={loading} />}
     </form>
   );
 };

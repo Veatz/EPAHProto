@@ -13,6 +13,10 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f5f5f5;
+  background-image: url('C:\Users\ASUS\Desktop\EPAHProto\frontend\src\images\farmers.png');
+  background-size: cover; /* Ensures the image covers the entire page */
+  background-position: center center; /* Centers the image */
+  background-attachment: fixed; /* Keeps the background fixed when scrolling */
 }
 
 .container {
@@ -20,6 +24,15 @@ body {
   margin: 0 auto;
 }
 
+.container h1 {
+  font-size: 3rem;  /* Increase the size */
+  font-weight: 700;    /* Make it bolder */
+  text-align: center;
+  color: #10561A;  /* Change to your desired color */
+  text-transform: uppercase; /* Make it uppercase */
+  letter-spacing: 2px;  /* Adds spacing between letters */
+  padding: 15px 0;
+}
 /* Header Section */
 header {
   background-color: #FFFF;
@@ -27,11 +40,11 @@ header {
   padding: 20px 0;
 }
 
-header h1 {
-  margin: 0;
-  color: white;
-  text-align: left; /* Aligns text to the left */
-  flex-grow: 1; /* Ensures h1 takes all the available space */
+.header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 header .container {
@@ -124,6 +137,42 @@ header .logo-link h1 {
   color: #26CF3E;
 }
 
+/*Navigation*/
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.back-btn {
+  background-color: #ccc;
+  padding: 10px 15px;
+  font-size: 20px;
+  padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #b3b3b3; /* Darker gray on hover */
+  transform: scale(1.05); /* Slightly enlarges the button */
+}
+
+.next-btn, .submit-btn {
+  background-color: #28a745;
+  font-size: 20px;
+  padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.next-btn:hover, .submit-btn:hover {
+  background-color: #218838; /* Darker green on hover */
+  transform: scale(1.05);
+}
 /* CBO Details Page */
 .cbo-details-page {
   padding: 20px;
@@ -189,38 +238,6 @@ form button:hover {
 form button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
-}
-
-/* Step Navigation */
-.step-nav {
-  display: flex;
-  justify-content: space-between;
-}
-
-.step-nav button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.step-nav button:hover {
-  background-color: #007bff;
-}
-
-.step-nav .back-button {
-  background-color: #ffc107;
-  color: white;
-}
-
-.step-nav .next-button {
-  background-color: #28a745;
-  color: white;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
 }
 
 /* Step 2: Operation Step */

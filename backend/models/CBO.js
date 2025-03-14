@@ -35,10 +35,10 @@ const CBOSchema = new mongoose.Schema(
 
     primaryContact: {
       name: { type: String, required: true },
-      designation: { type: String },
+      designation: { type: String, required: true  },
       email: { type: String, required: true },
       telephone: { type: String },
-      mobile: { type: String },
+      mobile: { type: String, required: true  },
     },
     secondaryContact: {
       name: { type: String },
