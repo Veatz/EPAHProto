@@ -3,15 +3,14 @@ import React from "react";
 const ContactStep = ({ formData, setFormData, nextStep, prevStep,errors }) => {
   const handleInputChange = (e, contactType) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [contactType]: {
-        ...formData[contactType],
+        ...prevData[contactType], // Ensure previous data exists
         [name]: value,
       },
-    });
+    }));
   };
-
   return (
     <div className="step-container">
       <h2>Step 3: Contact Persons</h2>

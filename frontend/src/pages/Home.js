@@ -23,7 +23,7 @@ const Home = () => {
       {/* Header Section */}
       <div className="header">
         <h1>Community-Based Organizations</h1>
-        <Link to="/register" className="register-button">Register</Link>
+        <Link to="/register" className="register-button">REGISTER</Link>
       </div>
 
       {/* CBO Cards Grid */}

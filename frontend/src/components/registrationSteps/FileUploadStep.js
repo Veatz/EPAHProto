@@ -8,7 +8,7 @@ const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading
         ...prevData,
         files: {
           ...prevData.files,
-          [field]: { ...prevData.files[field], file },
+          [field]: file.name, // ✅ Send only the filename
         },
       }));
     }

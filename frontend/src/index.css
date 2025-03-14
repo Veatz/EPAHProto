@@ -41,10 +41,12 @@ header {
 }
 
 .header h1 {
+  color: black; /* Text color */
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
   margin-bottom: 10px;
+  -webkit-text-stroke: 0.0.5px #EFDE1C; /* ✅ Green outline */
 }
 
 header .container {
@@ -87,20 +89,26 @@ header .logo-link h1 {
 }
 
 .home .register-button {
-  background-color: #10561A;
-  color: white;
+  background-color: #10561A; /* Dark green */
+  color: #FFFF; /* White text */
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
-  font-size: 30px;
-  font-family: Arial;
+  border: 2px solid #FFFF;
+  font-size: 25px;
+  font-family: Arial, sans-serif;
   font-weight: bold;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .home .register-button:hover {
-  background-color: #23BD39;
-  border-radius: 20px;
+  transform: scale(1.1); /* Pop-up effect */
+  box-shadow: 0px 3px 12px rgba(16, 86, 26, 0.6); /* Add shadow to create a lifting effect */
+  background-color: #1B7D2A; /* Slightly lighter green */
+  color: #FFF;
 }
+  
+  /* ✨ Glow effect */
 
 .cbo-cards-container {
   display: grid;

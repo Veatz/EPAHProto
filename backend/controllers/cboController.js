@@ -37,21 +37,27 @@ const getCBO = async (req, res) => {
 // Create a new CBO with Operation Details
 const createCBO = async (req, res) => {
   try {
-    const { name, shortname, description, address, representation, operationDetails: opDetails } = req.body;
-    
-    let operationDetails = JSON.parse(opDetails || "{}");
+    console.log("Received req.body:", req.body); // Debugging: Ensure it's an object
+
+    const { name, shortname, description, address, representation, operationDetails: opDetails, primaryContact, secondaryContact } = req.body;
+
+    // Ensure operationDetails is an object, not a string
+    let operationDetails = typeof opDetails === "string" ? JSON.parse(opDetails) : opDetails;
     const newOperationDetails = new OperationDetails(operationDetails);
     const savedOperationDetails = await newOperationDetails.save();
-    
-    // Process uploaded files and associated metadata
+
+    // Process uploaded files
     const files = {};
     Object.keys(req.files || {}).forEach((key) => {
       files[key] = { file: req.files[key][0].path };
-      if (req.body[key]) {
+      if (req.body[key] && typeof req.body[key] === "string") {
         Object.assign(files[key], JSON.parse(req.body[key]));
+      } else {
+        Object.assign(files[key], req.body[key]);
       }
     });
-    
+
+    // Create new CBO
     const newCBO = new CBO({
       name,
       shortname,
@@ -59,12 +65,15 @@ const createCBO = async (req, res) => {
       address,
       representation,
       operationDetails: savedOperationDetails._id,
+      primaryContact, // ✅ Ensure primaryContact is included
+      secondaryContact, // ✅ Ensure secondaryContact is included
       files,
     });
-    
+
     const savedCBO = await newCBO.save();
     res.status(201).json(savedCBO);
   } catch (error) {
+    console.error("Error creating CBO:", error);
     res.status(500).json({ error: error.message });
   }
 };

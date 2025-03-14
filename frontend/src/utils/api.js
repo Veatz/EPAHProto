@@ -21,7 +21,8 @@ export const registerCBO = async (formData) => {
   // ✅ Do NOT set Content-Type manually for FormData
   const response = await fetch(`${BASE_URL}/cbos`, {
     method: "POST",
-    body, // Let the browser set headers
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
   });
 
   if (!response.ok) {
