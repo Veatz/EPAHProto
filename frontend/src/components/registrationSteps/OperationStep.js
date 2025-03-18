@@ -104,13 +104,23 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
 
   const handleProcurementChange = (e) => {
     const { value, checked } = e.target;
-    const updatedExperience = [...formData.operationDetails.procurement_experience];
-    const index = updatedExperience.findIndex((exp) => exp.method === value);
-    if (checked && index === -1) {
-      updatedExperience.push({ method: value, participation_count: 0, contracts_won: 0, successful_implementations: 0 });
-    } else if (!checked && index !== -1) {
-      updatedExperience.splice(index, 1);
+    let updatedExperience = [...formData.operationDetails.procurement_experience];
+  
+    if (value === "No Experience") {
+      // If "No Experience" is checked, clear all other selections
+      updatedExperience = checked ? [{ method: "No Experience" }] : [];
+    } else {
+      // Remove "No Experience" if any other method is selected
+      updatedExperience = updatedExperience.filter(exp => exp.method !== "No Experience");
+  
+      const index = updatedExperience.findIndex((exp) => exp.method === value);
+      if (checked && index === -1) {
+        updatedExperience.push({ method: value, participation_count: 0, contracts_won: 0, successful_implementations: 0 });
+      } else if (!checked && index !== -1) {
+        updatedExperience.splice(index, 1);
+      }
     }
+  
     setFormData({
       ...formData,
       operationDetails: {
@@ -120,17 +130,29 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
     });
   };
 
-  const handleProcurementNumbers = (index, field, value) => {
+  const handleProcurementNumbers = (method, field, value) => {
     const updatedExperience = [...formData.operationDetails.procurement_experience];
-    updatedExperience[index][field] = parseInt(value, 10) || 0;
-    setFormData({
-      ...formData,
-      operationDetails: {
-        ...formData.operationDetails,
-        procurement_experience: updatedExperience,
-      },
-    });
+    const index = updatedExperience.findIndex((exp) => exp.method === method);
+    
+    if (index !== -1) {
+      updatedExperience[index] = {
+        ...updatedExperience[index],
+        [field]: parseInt(value, 10) || 0,
+      };
+  
+      setFormData({
+        ...formData,
+        operationDetails: {
+          ...formData.operationDetails,
+          procurement_experience: updatedExperience,
+        },
+      });
+    }
   };
+
+  const noExperienceSelected = formData.operationDetails.procurement_experience.some(
+    (exp) => exp.method === "No Experience"
+  );
 
 
   return (
@@ -198,7 +220,9 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
           name="target_members"
           value={formData.operationDetails.target_members}
           onChange={handleInputChange}
+          required
         />
+        {errors.target_members && <span className="error">{errors.target_members}</span>}
       </div>
 
       <div className="form-field">
@@ -228,6 +252,7 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
             readOnly
           />
         </div>
+        {errors.number_of_members && <span className="error">{errors.number_of_members}</span>}
       </div>
 
       {/*Annual Production*/}
@@ -241,25 +266,25 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
                 <th>Type</th>
                 <th>Quantity</th>
                 <th>Unit</th>
-                <th>Market Value</th>
-                <th>Actions</th>
+                <th>Market Value (PHP)</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {formData.operationDetails.annual_production.map((item, index) => (
                 <tr key={index}>
                   <td>
-                    <input
-                      type="text"
-                      value={item.product}
-                      onChange={(e) => handleProductionChange(index, "product", e.target.value)}
-                      required
-                    />
+                  <input
+                    type="text"
+                    value={item.product || ""}
+                    onChange={(e) => handleProductionChange(index, "product", e.target.value)}
+                    required
+                  />
                   </td>
                   <td>
                     <input
                       type="text"
-                      value={item.type}
+                      value={item.type || ""}
                       onChange={(e) => handleProductionChange(index, "type", e.target.value)}
                       required
                     />
@@ -267,7 +292,7 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
                   <td>
                     <input
                       type="number"
-                      value={item.quantity}
+                      value={item.quantity || 0}
                       onChange={(e) => handleProductionChange(index, "quantity", e.target.value)}
                       required
                     />
@@ -275,7 +300,7 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
                   <td>
                     <input
                       type="text"
-                      value={item.unit}
+                      value={item.unit || ""}
                       onChange={(e) => handleProductionChange(index, "unit", e.target.value)}
                       required
                     />
@@ -283,14 +308,14 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
                   <td>
                     <input
                       type="number"
-                      value={item.market_value}
+                      value={item.market_value || 0}
                       onChange={(e) => handleProductionChange(index, "market_value", e.target.value)}
                       required
                     />
                   </td>
                   <td>
                     <button type="button" className="remove-product-btn" onClick={() => removeProductionEntry(index)}>
-                      Remove
+                    Remove
                     </button>
                   </td>
                 </tr>
@@ -310,6 +335,7 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
           name="production_scope"
           value={formData.operationDetails.production_scope}
           onChange={handleInputChange}
+          required
         />
       </div>
 
@@ -320,6 +346,7 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
           name="sales_scope"
           value={formData.operationDetails.sales_scope}
           onChange={handleInputChange}
+          required
         />
       </div>
 
@@ -383,57 +410,40 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
                 return (
                   <tr key={method}>
                     <td style={{ border: "1px solid #000", padding: "8px" }}>
-                      <input
-                        type="checkbox"
-                        value={method}
-                        onChange={handleProcurementChange}
-                        checked={isChecked}
-                      />
+                    <input
+                      type="checkbox"
+                      value={method}
+                      onChange={handleProcurementChange}
+                      checked={isChecked}
+                      disabled={noExperienceSelected && method !== "No Experience"} 
+                    />
                       {method}
                     </td>
                     <td style={{ border: "1px solid #000", padding: "8px" }}>
-                      <input
-                        type="number"
-                        value={experience.participation_count}
-                        onChange={(e) =>
-                          handleProcurementNumbers(
-                            index,
-                            "participation_count",
-                            e.target.value
-                          )
-                        }
-                        style={{ width: "100%" }}
-                        disabled={!isChecked}
-                      />
+                    <input
+                      type="number"
+                      value={experience.participation_count}
+                      onChange={(e) => handleProcurementNumbers(method, "participation_count", e.target.value)}
+                      style={{ width: "100%" }}
+                      disabled={!isChecked || noExperienceSelected} // Disable when "No Experience" is checked
+                    />
                     </td>
                     <td style={{ border: "1px solid #000", padding: "8px" }}>
                       <input
                         type="number"
                         value={experience.contracts_won}
-                        onChange={(e) =>
-                          handleProcurementNumbers(
-                            index,
-                            "contracts_won",
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => handleProcurementNumbers(method, "contracts_won", e.target.value)}
                         style={{ width: "100%" }}
-                        disabled={!isChecked}
+                        disabled={!isChecked || noExperienceSelected}
                       />
                     </td>
                     <td style={{ border: "1px solid #000", padding: "8px" }}>
                       <input
                         type="number"
                         value={experience.successful_implementations}
-                        onChange={(e) =>
-                          handleProcurementNumbers(
-                            index,
-                            "successful_implementations",
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => handleProcurementNumbers(method, "successful_implementations", e.target.value)}
                         style={{ width: "100%" }}
-                        disabled={!isChecked}
+                        disabled={!isChecked || noExperienceSelected}
                       />
                     </td>
                   </tr>
@@ -443,10 +453,12 @@ const OperationStep = ({ formData, setFormData, errors, nextStep, prevStep }) =>
           </table>
         </div>
       </div>
+      {errors.procurement_experience && <span className="error">{errors.procurement_experience}</span>}
+
       
       {/* Sponsor Agency */}
       <div className="form-field">
-        <label>Sponsor Agency:</label>
+        <label>Sponsor Agency / Institution:</label>
         <input
           type="text"
           name="sponsor_agency"

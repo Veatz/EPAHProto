@@ -30,16 +30,14 @@ const Home = () => {
       <div className="cbo-cards-container">
         {cbos &&
           cbos.map((cbo) => (
-            <div key={cbo._id} className="cbo-card">
-              <h3>
-                <Link to={`/cbos/${cbo._id}`} className="cbo-title-link">
-                  {cbo.name}
-                </Link>
-              </h3>
-              <p><strong>Shortname:</strong> {cbo.shortname}</p>
-              <p><strong>Address:</strong> {cbo.address}</p>
-              <p><strong>Short Description:</strong> {cbo.description}</p>
-            </div>
+            <Link to={`/cbos/${cbo._id}`} key={cbo._id} className="cbo-card-link">
+              <div className="cbo-card">
+                <h3>{cbo.name}</h3>
+                <p><strong>Shortname:</strong> {cbo.shortname}</p>
+                <p><strong>Address:</strong> {cbo.address}</p>
+                <p><strong>Short Description:</strong> {cbo.description}</p>
+              </div>
+            </Link>
           ))}
       </div>
     </div>

@@ -96,18 +96,14 @@ const validateStep = () => {
   if (step === 2) {
     if (!formData.operationDetails.organization_registration) {
       newErrors.organization_registration = "Organization registration is required";
-    } else if (
-      !["Cooperative", "Stock Corporation", "Non-stock Corporation", "Unregistered", "Others"].includes(
-        formData.operationDetails.organization_registration
-      )
-    ) {
+    } else if (!["Cooperative", "Stock Corporation", "Non-stock Corporation", "Unregistered", "Others"].includes(
+      formData.operationDetails.organization_registration
+    )) {
       newErrors.organization_registration = "Invalid organization registration type";
     }
 
-    if (
-      formData.operationDetails.organization_registration === "Others" &&
-      !formData.operationDetails.other_organization_registration.trim()
-    ) {
+    if (formData.operationDetails.organization_registration === "Others" &&
+        !formData.operationDetails.other_organization_registration.trim()) {
       newErrors.other_organization_registration = "You must specify an organization type when 'Others' is selected";
     }
 
@@ -117,11 +113,75 @@ const validateStep = () => {
       newErrors.date_established = "Date established cannot be in the future";
     }
 
-    if (formData.operationDetails.number_of_members.male < 0) {
-      newErrors.number_of_members_male = "Number of male members cannot be negative";
+    // ✅ Ensure Target Members is required
+    if (!formData.operationDetails.target_members.trim()) {
+      newErrors.target_members = "Target members field is required";
     }
-    if (formData.operationDetails.number_of_members.female < 0) {
-      newErrors.number_of_members_female = "Number of female members cannot be negative";
+
+    // ✅ Ensure Total Number of Members aren't 0
+    if (
+      formData.operationDetails.number_of_members.male === 0 &&
+      formData.operationDetails.number_of_members.female === 0
+      ) {
+          newErrors.number_of_members = "Number of members cannot be zero";
+      }
+
+    // ✅ Ensure Annual Production has at least one product
+    if (formData.operationDetails.annual_production.length === 0) {
+      newErrors.annual_production = "At least one product is required in Annual Production";
+    } else {
+      formData.operationDetails.annual_production.forEach((product, index) => {
+        if (!product.product.trim()) {
+          newErrors[`annual_production_product_${index}`] = `Product name is required for item ${index + 1}`;
+        }
+        if (!product.type.trim()) {
+          newErrors[`annual_production_type_${index}`] = `Product type is required for item ${index + 1}`;
+        }
+        if (product.quantity <= 0) {
+          newErrors[`annual_production_quantity_${index}`] = `Quantity must be greater than 0 for item ${index + 1}`;
+        }
+        if (!product.unit.trim()) {
+          newErrors[`annual_production_unit_${index}`] = `Unit is required for item ${index + 1}`;
+        }
+        if (product.market_value < 0) {
+          newErrors[`annual_production_market_value_${index}`] = `Market value cannot be negative for item ${index + 1}`;
+        }
+      });
+    }
+
+    // ✅ Ensure Area/Scope of Production is required
+    if (!formData.operationDetails.production_scope.trim()) {
+      newErrors.production_scope = "Area/Scope of Production field is required";
+    }
+
+    // ✅ Ensure Area/Scope of Sales is required
+    if (!formData.operationDetails.sales_scope.trim()) {
+      newErrors.sales_scope = "Area/Scope of Sales field is required";
+    }
+
+
+    // ✅ Ensure Procurement Experience has at least one method (unless "No Experience" is selected)
+    const noExperienceSelected = formData.operationDetails.procurement_experience.some(
+      (exp) => exp.method === "No Experience"
+    );
+
+    if (!noExperienceSelected && formData.operationDetails.procurement_experience.length === 0) {
+      newErrors.procurement_experience = "At least one procurement method is required";
+    } else {
+      formData.operationDetails.procurement_experience.forEach((entry, index) => {
+        if (!entry.method.trim()) {
+          newErrors[`procurement_experience_method_${index}`] = `Procurement method is required for entry ${index + 1}`;
+        }
+        if (entry.participation_count < 0) {
+          newErrors[`procurement_experience_participation_${index}`] = `Participation count cannot be negative for item ${index + 1}`;
+        }
+        if (entry.contracts_won < 0) {
+          newErrors[`procurement_experience_contracts_${index}`] = `Contracts won cannot be negative for item ${index + 1}`;
+        }
+        if (entry.successful_implementations < 0) {
+          newErrors[`procurement_experience_success_${index}`] = `Successful implementations cannot be negative for item ${index + 1}`;
+        }
+      });
     }
   }
 
@@ -137,20 +197,40 @@ const validateStep = () => {
       }
       if (!formData.primaryContact.email.trim()) {
         newErrors.primaryContactEmail = "Primary contact email is required";
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.primaryContact.email)) {
+          newErrors.primaryContactEmail = "Invalid email format";
+        }
       }
       if (!formData.primaryContact.mobile.trim()) {
         newErrors.primaryContactMobile = "Primary contact mobile is required";
+      } else {
+        const mobileRegex = /^[0-9]{10,15}$/;
+        if (!mobileRegex.test(formData.primaryContact.mobile)) {
+          newErrors.primaryContactMobile = "Invalid mobile number format";
+        }
       }
     }
   }
-
+  
   if (step === 4) {
     if (!formData.files.rctResolution) newErrors.rctResolution = "RCT Resolution is required";
-
-    const requiredFileFields = ["dti", "sec", "cda", "csoNpoNgoPo", "doleRule1020", "businessPermit"];
+  
+    const requiredFileFields = ["dti", "sec", "cda", "businessPermit"];
     requiredFileFields.forEach((key) => {
       if (!formData.files[key]?.file) {
         newErrors[key] = `${key} file is required`;
+      }
+    });
+  
+    // Validate date fields inside files
+    Object.keys(formData.files).forEach((fileKey) => {
+      if (formData.files[fileKey]?.dateOfIssuance && new Date(formData.files[fileKey].dateOfIssuance) > new Date()) {
+        newErrors[`${fileKey}_dateOfIssuance`] = "Date of Issuance cannot be in the future";
+      }
+      if (formData.files[fileKey]?.dateOfValidity && new Date(formData.files[fileKey].dateOfValidity) < new Date()) {
+        newErrors[`${fileKey}_dateOfValidity`] = "Date of Validity must be in the future";
       }
     });
   }
@@ -169,13 +249,14 @@ const prevStep = () => setStep(step - 1);
     e.preventDefault();
     if (!validateStep()) return;
 
-    console.log("Final Data Being Sent:", JSON.stringify(formData, null, 2)); // Log data before sending
-  
+    console.log("Submitting form data:", formData); // Debugging
+
     setLoading(true);
 
     try {
       const response = await registerCBO(formData);
       dispatch({ type: "CREATE_CBO", payload: response });
+
       alert("Registration Successful!");
       setStep(1);
       setFormData({
@@ -256,7 +337,7 @@ const prevStep = () => setStep(step - 1);
       {step === 2 && <OperationStep formData={formData} setFormData={setFormData} errors={errors} nextStep={nextStep} prevStep={prevStep} />}
       {step === 3 && <ContactStep formData={formData} setFormData={setFormData} errors={errors} nextStep={nextStep} prevStep={prevStep} />}
       {step === 4 && <FileUploadStep formData={formData} setFormData={setFormData} errors={errors} prevStep={prevStep} handleSubmit={handleSubmit} loading={loading} />}
-    </form>
+      </form>
   );
 };
 

@@ -33,6 +33,7 @@ const ContactStep = ({ formData, setFormData, nextStep, prevStep,errors }) => {
           name="designation"
           value={formData.primaryContact.designation}
           onChange={(e) => handleInputChange(e, "primaryContact")}
+          required
         />
 
         <label>Email Address</label>
@@ -59,6 +60,7 @@ const ContactStep = ({ formData, setFormData, nextStep, prevStep,errors }) => {
           name="mobile"
           value={formData.primaryContact.mobile}
           onChange={(e) => handleInputChange(e, "primaryContact")}
+          required
         />
       </div>
 

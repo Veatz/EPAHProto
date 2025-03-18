@@ -31,7 +31,7 @@ const OperationDetailsSchema = new mongoose.Schema({
     default: "",
   },
 
-  target_members: { type: String },
+  target_members: { type: String, required: true },
   
   number_of_members: {
     male: { type: Number, default: 0, min: 0 },
@@ -47,8 +47,8 @@ const OperationDetailsSchema = new mongoose.Schema({
       market_value: { type: Number, required: true, min: 0 },
     },
   ],
-  production_scope: { type: String },
-  sales_scope: { type: String },
+  production_scope: { type: String , required: true},
+  sales_scope: { type: String , required: true},
   total_assets: { type: Number, min: 0 },
   total_liabilities: { type: Number, min: 0 },
   annual_gross_income: { type: Number,min: 0},

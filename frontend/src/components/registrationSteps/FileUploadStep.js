@@ -1,19 +1,46 @@
 import React from "react";
 
 const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading }) => {
+  const subFieldsByFile = {
+    rct: [],
+    dti: ["territorialScope","registryNo", "dateOfIssuance", "dateOfValidity"],
+    sec: ["typeOfRegistration","registryNo", "dateOfIssuance", "dateOfValidity"],
+    cda: ["typeOfCooperative","registryNo", "dateOfIssuance", "dateOfValidity"],
+    csoNpoNgoPo: ["agencyIssuer","registryNo", "dateOfIssuance", "dateOfValidity" ],
+    doleRule1020: ["registryNo","dateOfIssuance", "dateOfValidity"],
+    bankBook: [],
+    auditedFinancialStatement: ["year"],
+    latestITR: ["year"],
+    salesInvoice: [],
+    businessPermit: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    ffeDis: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    birRegistration: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    rsbsa: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    fishAr: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    fda: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    agrarianReformBeneficiaries: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    farmersAssociation: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    irrigatorsAssociation: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+    laborUnionsWorkersAssoc: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  };
+  
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
-    if (file) {
-      setFormData((prevData) => ({
-        ...prevData,
-        files: {
-          ...prevData.files,
-          [field]: file.name, // ✅ Send only the filename
-        },
-      }));
-    }
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      files: {
+        ...prevData.files,
+        [field]: file
+          ? {
+              file,
+              ...Object.fromEntries((subFieldsByFile[field] || []).map((key) => [key, ""])), // Initialize only relevant subfields
+            }
+          : undefined, // Remove subfields if file is removed
+      },
+    }));
   };
-
+  
   const handleInputChange = (e, field, subField) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -24,10 +51,37 @@ const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading
     }));
   };
 
+  const handleRemoveFile = (field) => {
+    // Clear the file input manually by selecting it via ref
+    const fileInput = document.getElementById(`file-input-${field}`);
+    if (fileInput) fileInput.value = ""; // Reset file input
+  
+    // Remove file and subfields from state
+    setFormData((prevData) => ({
+      ...prevData,
+      files: {
+        ...prevData.files,
+        [field]: undefined, // Completely remove the file and subfields
+      },
+    }));
+  };
+
+  
   const sections = {
     "Legal Requirements": ["rctResolution", "dti", "sec", "cda", "csoNpoNgoPo", "doleRule1020"],
     "Financial Requirements": ["bankBook", "auditedFinancialStatement", "latestITR", "salesInvoice"],
-    "Additional Registration/Accreditations": ["businessPermit", "ffeDis", "birRegistration","philGeps", "rsbsa", "fishAr", "fda", "agrarianReformBeneficiaries", "farmersAssociation", "irrigatorsAssociation", "laborUnionsWorkersAssoc", "slpa"],
+    "Additional Registration/Accreditations": [
+      "businessPermit",
+      "ffeDis",
+      "birRegistration",
+      "rsbsa",
+      "fishAr",
+      "fda",
+      "agrarianReformBeneficiaries",
+      "farmersAssociation",
+      "irrigatorsAssociation",
+      "laborUnionsWorkersAssoc",
+    ],
   };
 
   const labels = {
@@ -43,7 +97,7 @@ const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading
       </>
     ),
     doleRule1020: "Department of Labor and Employment (DOLE) Registration under Rule 1020",
-    bankBook: "Bank Book / Books of Account",
+    bankBook: "Bank Book/Books of Account",
     auditedFinancialStatement: "Updated / Audited Financial Statement",
     latestITR: "Latest Income Tax Return (ITR)",
     salesInvoice: "Sales Invoice",
@@ -72,7 +126,7 @@ const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading
     year: "Year",
   };
 
-  return (
+   return (
     <div className="step-container">
       <h2>Step 4: Legal Documents</h2>
       {Object.keys(sections).map((section) => (
@@ -85,36 +139,44 @@ const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading
                 <div className="form-inputs">
                 <div className="file-upload-container">
                 <input
+                  id={`file-input-${field}`} // Unique ID for resetting
                   type="file"
                   accept=".pdf,.jpg,.jpeg,.png"
                   onChange={(e) => handleFileChange(e, field)}
                   className="file-input"
                 />
-                </div>
-                    {formData.files[field]?.file && (
+
+                {/* Show Remove Button only if a file is selected */}
+                {formData.files[field]?.file && (
+                  <button type="button" className="remove-file-btn" onClick={() => handleRemoveFile(field)}>
+                  ✖
+                </button>
+                )}
+              </div>
+
+                  {/* Render subfields only if a file is selected and if the field has subfields */}
+                  {formData.files[field]?.file && subFieldsByFile[field]?.length > 0 && (
                     <div className="form-field">
-                      {Object.keys(formData.files[field]).map((subField) => {
-                        if (subField === "file") return null; // Skip file field
-
-                        let inputType = "text"; // Default input type
-                        if (subField.includes("date")) inputType = "date"; // Date fields
-                        else if (subField.includes("year") || subField.includes("registryNo")) inputType = "number"; // Number fields
-
-                        return (
-                          <div key={subField} className="subfield-container">
-                            <label className="subfield-label">
-                              {subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
-                            </label>
-                            <input
-                              type={inputType}
-                              className="subfield-input"
-                              placeholder={subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
-                              value={formData.files[field][subField]}
-                              onChange={(e) => handleInputChange(e, field, subField)}
-                            />
-                          </div>
-                        );
-                      })}
+                      {subFieldsByFile[field].map((subField) => (
+                        <div key={subField} className="subfield-container">
+                          <label className="subfield-label">
+                            {subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
+                          </label>
+                          <input
+                            type={
+                              subField.includes("date")
+                                ? "date"
+                                : subField.includes("year") || subField.includes("registryNo")
+                                ? "number"
+                                : "text"
+                            }
+                            className="subfield-input"
+                            placeholder={subFieldLabels[subField] || subField.replace(/([A-Z])/g, " $1").trim()}
+                            value={formData.files[field][subField]}
+                            onChange={(e) => handleInputChange(e, field, subField)}
+                          />
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -124,8 +186,12 @@ const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading
         </div>
       ))}
       <div className="step-nav">
-        <button type="button" className="back-btn" onClick={prevStep}>Back</button>
-        <button type="submit" className="submit-btn" disabled={loading}>{loading ? "Submitting..." : "Submit"}</button>
+        <button type="button" className="back-btn" onClick={prevStep}>
+          Back
+        </button>
+        <button type="button" className="next-btn" onClick={handleSubmit}>
+          {loading ? "Submitting..." : "Submit"}
+        </button>
       </div>
     </div>
   );

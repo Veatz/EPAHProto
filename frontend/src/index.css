@@ -117,6 +117,11 @@ header .logo-link h1 {
   padding: 20px 0;
 }
 
+.cbo-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .cbo-card {
   background-color: white;
   padding: 20px;
@@ -127,11 +132,13 @@ header .logo-link h1 {
 
 .cbo-card:hover {
   transform: translateY(-5px); 
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 
 .cbo-card h3 {
+  color: #10561A;
   font-size: 1.5rem;
   margin-bottom: 10px;
 }
@@ -182,44 +189,94 @@ header .logo-link h1 {
   transform: scale(1.05);
 }
 /* CBO Details Page */
-.cbo-details-page {
-  padding: 20px;
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
-.cbo-document {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.styled-table {
+  width: 80%;
+  border-collapse: collapse;
+  margin: 20px auto;
+  text-align: center;
 }
+
+.styled-table th, .styled-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.styled-table th {
+  background-color: #28a745;
+  color: white;
+}
+
+.styled-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+.cbo-details-page {
+  max-width: 85%;
+  margin: 40px auto; /* Default spacing */
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Add more space on larger screens */
+@media (min-width: 1024px) {
+  .cbo-details-page {
+    margin: 60px auto;  /* More space on bigger screens */
+  }
+}
+
 
 .cbo-title {
-  font-size: 2rem;
-  margin-bottom: 20px;
+  color: #10561A;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-.cbo-details-page p {
-  font-size: 1rem;
+p {
+  font-size: 16px;
+  color: #333;
   margin: 5px 0;
 }
 
-.back-button {
-  background-color: #28a745;
-  color: white;
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 5px;
+h2 {
+  color: #10561A;
+  border-bottom: 2px solid #218838;
+  padding-bottom: 5px;
   margin-top: 20px;
 }
 
+.back-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+  font-size: large;
+}
+
 .back-button:hover {
-  background-color: #218838;
+  background-color: #c82333;
 }
 
 .loading-text {
   font-size: 1.2rem;
   color: #555;
+  text-align: center;
 }
+
 
 /* Registration Form */
 form {
@@ -298,7 +355,6 @@ td input[type="checkbox"] {
   outline: none;
   box-shadow: none;
 }
-
 
 /* Button styling for add and remove */
 .add-product-btn {
@@ -416,6 +472,27 @@ td input[type="checkbox"] {
   border-radius: 5px;
 }
 
+.remove-file-btn {
+  margin-left: 10px;
+  background: none; /* No background */
+  border: none;
+  font-size: 18px;
+  color: red;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-file-btn:hover {
+  color: white; /* Change icon color on hover */
+  background: red; /* Make background red on hover */
+  transition: 0.2s ease-in-out;
+  padding: 5px;
+}
+
+
 /* Make the step-container fill the page */
 .step-container {
   background-color: white;
@@ -457,7 +534,13 @@ td input[type="checkbox"] {
   margin-top: 0.5rem;
 }
 
-/**/
+/* Error */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block;
+}
 
 .file-upload-step .error {
   color: red;
