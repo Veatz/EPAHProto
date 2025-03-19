@@ -110,47 +110,45 @@ header .logo-link h1 {
   
   /* ✨ Glow effect */
 
-.cbo-cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(550px, 1fr)); /* Adjusted for responsiveness */
-  gap: 20px;
-  padding: 20px 0;
-}
+  .cbo-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(550px, 1fr)); /* Adjusted for responsiveness */
+    gap: 20px;
+    padding: 20px 0;
+  }
+  
+  .cbo-card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .cbo-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 250px; /* Set a minimum height for consistent size */
+    box-sizing: border-box; /* Ensure padding and borders are part of the total height/width */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cbo-card:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-5px);
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .cbo-card h3 {
+    color: #10561A;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
 
-.cbo-card-link {
-  text-decoration: none;
-  color: inherit;
-}
 
-.cbo-card {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease; 
-}
-
-.cbo-card:hover {
-  transform: translateY(-5px); 
-  cursor: pointer;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-
-.cbo-card h3 {
-  color: #10561A;
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.cbo-title-link {
-  text-decoration: none;
-  color: #333;
-}
-
-.cbo-title-link:hover {
-  color: #26CF3E;
-}
 
 /*Navigation*/
 .step-nav {
@@ -227,6 +225,14 @@ header .logo-link h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.cbo-details-page strong{
+  font-size: larger;
+  color: #181A18;
+  font-weight: bold;
+  font-family: 'Arial';
+  font-size: 18px;
+}
+
 /* Add more space on larger screens */
 @media (min-width: 1024px) {
   .cbo-details-page {
@@ -240,6 +246,7 @@ header .logo-link h1 {
   margin-bottom: 10px;
   text-align: center;
 }
+
 
 p {
   font-size: 16px;
@@ -284,25 +291,6 @@ form {
   flex-direction: column;
   gap: 20px;
   margin: 20px 0;
-}
-
-form button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  align-items: center;
-}
-
-form button:hover {
-  background-color: #0056b3;
-}
-
-form button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
 }
 
 /* Step 2: Operation Step */

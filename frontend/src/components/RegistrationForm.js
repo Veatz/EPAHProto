@@ -79,6 +79,39 @@ const RegistrationForm = () => {
   },
 });
 
+const subFieldsByFile = {
+  dti: ["territorialScope", "dateOfIssuance", "dateOfValidity"],
+  sec: ["typeOfRegistration", "registryNo", "dateOfIssuance", "dateOfValidity"],
+  cda: ["typeOfCooperative", "registryNo", "dateOfIssuance", "dateOfValidity"],
+  csoNpoNgoPo: ["agencyIssuer", "registryNo", "dateOfIssuance", "dateOfValidity"],
+  doleRule1020: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  auditedFinancialStatement: ["year"],
+  latestITR: ["year"],
+  businessPermit: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  ffeDis: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  birRegistration: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  philGeps: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  rsbsa: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  fishAr: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  fda: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  agrarianReformBeneficiaries: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  farmersAssociation: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  irrigatorsAssociation: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  laborUnionsWorkersAssoc: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+  slpa: ["registryNo", "dateOfIssuance", "dateOfValidity"],
+};
+
+const subFieldLabels = {
+  territorialScope: "Territorial Scope",
+  typeOfRegistration: "Type of Registration",
+  typeOfCooperative: "Type of Cooperative",
+  agencyIssuer: "Agency Issuer",
+  registryNo: "Registry Number",
+  dateOfIssuance: "Date of Issuance",
+  dateOfValidity: "Date of Validity",
+  year: "Year",
+};
+
 const validateStep = () => {
   let newErrors = {};
 
@@ -215,25 +248,31 @@ const validateStep = () => {
   }
   
   if (step === 4) {
-    if (!formData.files.rctResolution) newErrors.rctResolution = "RCT Resolution is required";
-  
-    const requiredFileFields = ["dti", "sec", "cda", "businessPermit"];
-    requiredFileFields.forEach((key) => {
-      if (!formData.files[key]?.file) {
-        newErrors[key] = `${key} file is required`;
-      }
-    });
-  
-    // Validate date fields inside files
     Object.keys(formData.files).forEach((fileKey) => {
-      if (formData.files[fileKey]?.dateOfIssuance && new Date(formData.files[fileKey].dateOfIssuance) > new Date()) {
-        newErrors[`${fileKey}_dateOfIssuance`] = "Date of Issuance cannot be in the future";
-      }
-      if (formData.files[fileKey]?.dateOfValidity && new Date(formData.files[fileKey].dateOfValidity) < new Date()) {
-        newErrors[`${fileKey}_dateOfValidity`] = "Date of Validity must be in the future";
+      const fileData = formData.files[fileKey];
+  
+      if (fileData?.file) {
+        const requiredSubFields = subFieldsByFile[fileKey] || [];
+  
+        requiredSubFields.forEach((subField) => {
+          const value = fileData[subField];
+  
+          if (!value || (typeof value === "string" && !value.trim())) {
+            newErrors[`${fileKey}_${subField}`] = `${subFieldLabels[subField] || subField} is required`;
+          }
+  
+          if (subField === "dateOfIssuance" && new Date(value) > new Date()) {
+            newErrors[`${fileKey}_dateOfIssuance`] = "Date of Issuance cannot be in the future";
+          }
+  
+          if (subField === "dateOfValidity" && new Date(value) < new Date()) {
+            newErrors[`${fileKey}_dateOfValidity`] = "Date of Validity must be in the future";
+          }
+        });
       }
     });
   }
+  
 
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;

@@ -60,7 +60,7 @@ const CBOdetailsPage = () => {
                   <th>Type</th>
                   <th>Quantity</th>
                   <th>Unit</th>
-                  <th>Market Value</th>
+                  <th>Market Value (PHP)</th>
                 </tr>
               </thead>
               <tbody>

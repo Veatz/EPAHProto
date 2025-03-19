@@ -1,4 +1,30 @@
 const BasicInfoStep = ({ formData, setFormData, nextStep }) => {
+  const wordLimit = 50;
+
+  const handleDescriptionChange = (e) => {
+    const description = e.target.value;
+    const wordCount = description.trim().split(/\s+/).length;
+
+    // Allow the input only if the word count is within the limit
+    if (wordCount <= wordLimit || description === "") {
+      setFormData({ ...formData, description: e.target.value });
+    }
+  };
+
+  // Calculate the current word count and remaining words
+  const wordCount = formData.description.trim().split(/\s+/).length;
+  const remainingWords = wordLimit - wordCount;
+
+  // Set the color based on the word count exceeding the limit
+  const wordCountStyle = {
+    color: wordCount > wordLimit ? 'red' : 'black',
+    position: 'absolute',
+    bottom: '10px',
+    right: '10px',
+    fontSize: '12px',
+    margin: '10px',
+  };
+
   return (
     <div className="step-container">
       <h2>Step 1: Basic Information</h2>
@@ -25,13 +51,16 @@ const BasicInfoStep = ({ formData, setFormData, nextStep }) => {
         />
       </div>
 
-      <div className="form-field">
+      <div className="form-field" style={{ position: 'relative' }}>
         <label htmlFor="description">Short Description</label>
         <textarea
           id="description"
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={handleDescriptionChange}
         />
+        <small style={wordCountStyle}>
+          {wordCount}/{wordLimit} words
+        </small>
       </div>
 
       <div className="form-field">
@@ -58,6 +87,7 @@ const BasicInfoStep = ({ formData, setFormData, nextStep }) => {
           <option value="Branch">Branch</option>
         </select>
       </div>
+
       <div className="step-nav" style={{ display: "flex", justifyContent: "flex-end" }}>
         <button type="button" className="next-btn" onClick={nextStep}>Next</button>
       </div>
