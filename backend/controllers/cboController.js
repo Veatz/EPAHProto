@@ -37,46 +37,70 @@ const getCBO = async (req, res) => {
 // Create a new CBO with Operation Details
 const createCBO = async (req, res) => {
   try {
-    console.log("Received req.body:", req.body); // Debugging: Ensure it's an object
+    console.log("✅ Received Request Body:", req.body);
+    console.log("✅ Received Files:", req.files);
 
-    const { name, shortname, description, address, representation, operationDetails: opDetails, primaryContact, secondaryContact } = req.body;
+    // 🛑 Check if `req.body` is missing
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ error: "Missing form data. Ensure 'Content-Type: multipart/form-data' is set." });
+    }
 
-    // Ensure operationDetails is an object, not a string
-    let operationDetails = typeof opDetails === "string" ? JSON.parse(opDetails) : opDetails;
-    const newOperationDetails = new OperationDetails(operationDetails);
-    const savedOperationDetails = await newOperationDetails.save();
+    // ✅ Extract Required Fields
+    const { name, shortname, address, representation } = req.body;
 
-    // Process uploaded files
-    const files = {};
-    Object.keys(req.files || {}).forEach((key) => {
-      files[key] = { file: req.files[key][0].path };
-      if (req.body[key] && typeof req.body[key] === "string") {
-        Object.assign(files[key], JSON.parse(req.body[key]));
-      } else {
-        Object.assign(files[key], req.body[key]);
-      }
+    if (!name || !shortname || !address || !representation) {
+      return res.status(400).json({ error: "Missing required fields: name, shortname, address, representation" });
+    }
+
+    // ✅ Parse JSON Fields
+    let operationDetails = {};
+    let primaryContact = {};
+    let secondaryContact = {};
+
+    try {
+      operationDetails = req.body.operationDetails ? JSON.parse(req.body.operationDetails) : {};
+      primaryContact = req.body.primaryContact ? JSON.parse(req.body.primaryContact) : {};
+      secondaryContact = req.body.secondaryContact ? JSON.parse(req.body.secondaryContact) : {};
+    } catch (parseError) {
+      console.error("❌ Error parsing JSON fields:", parseError);
+      return res.status(400).json({ error: "Invalid JSON format in request body" });
+    }
+
+    // ✅ Handle File Uploads (Ensure URLs are stored)
+    const files = req.files || {};
+    let filesData = {};
+    Object.keys(files).forEach((key) => {
+      filesData[key] = { file: `http://localhost:4000/uploads/${files[key][0].filename}` };
     });
 
-    // Create new CBO
+    // ✅ Save `operationDetails` First (If Needed)
+    let savedOperationDetails;
+    if (Object.keys(operationDetails).length > 0) {
+      const newOperationDetails = new OperationDetails(operationDetails);
+      savedOperationDetails = await newOperationDetails.save();
+    }
+
+    // ✅ Create CBO Entry
     const newCBO = new CBO({
       name,
       shortname,
-      description,
       address,
       representation,
-      operationDetails: savedOperationDetails._id,
-      primaryContact, // ✅ Ensure primaryContact is included
-      secondaryContact, // ✅ Ensure secondaryContact is included
-      files,
+      operationDetails: savedOperationDetails ? savedOperationDetails._id : null,
+      primaryContact,
+      secondaryContact,
+      files: filesData,
     });
 
+    // ✅ Save and Respond with Success
     const savedCBO = await newCBO.save();
     res.status(201).json(savedCBO);
   } catch (error) {
-    console.error("Error creating CBO:", error);
-    res.status(500).json({ error: error.message });
+    console.error("❌ Error creating CBO:", error);
+    res.status(500).json({ error: "Internal Server Error. Please check backend logs." });
   }
 };
+
 
 // Delete a CBO and its operation details
 const deleteCBO = async (req, res) => {

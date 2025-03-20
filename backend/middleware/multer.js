@@ -1,17 +1,17 @@
 const multer = require("multer");
 const path = require("path");
 
-// Configure storage for uploaded files
+// ✅ Configure Storage for Uploaded Files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Save files in the 'uploads' folder
+    cb(null, "uploads/"); // Save files in 'uploads' folder
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname); // Unique filename
   },
 });
 
-// File filter to allow only PDF, JPEG, and PNG files
+// ✅ File Filter to Allow Only PDF, JPEG, PNG
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
   if (allowedTypes.includes(file.mimetype)) {
@@ -21,10 +21,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Initialize multer with the configuration
+// ✅ Increase File Upload Size Limit (10MB) & Allow Large Requests
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-})
+  limits: { fileSize: 10 * 1024 * 1024, fieldSize: 10 * 1024 * 1024 },
+});
+
 module.exports = upload;

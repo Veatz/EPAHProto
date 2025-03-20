@@ -32,6 +32,7 @@ const CBOdetailsPage = () => {
     <div className="cbo-details-page">
       <div className="cbo-document">
         <h1 className="cbo-title">{cbo.name}</h1>
+        <h2>Basic Information</h2>
         <p><strong>Name:</strong> {cbo.name}</p>
         <p><strong>Shortname:</strong> {cbo.shortname}</p>
         <p><strong>Address:</strong> {cbo.address}</p>
@@ -44,13 +45,49 @@ const CBOdetailsPage = () => {
             ? cbo.operationDetails?.other_organization_registration || "N/A"
             : cbo.operationDetails?.organization_registration || "N/A"}
         </p>
-        <p><strong>Date Established:</strong> {cbo.operationDetails?.date_established || "N/A"}</p>
+        <p>
+          <strong>Date Established:</strong> {cbo.operationDetails?.date_established 
+            ? new Date(cbo.operationDetails.date_established).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }) 
+            : "N/A"}
+        </p>
+        <p><strong>Philippine Statistical Industry Classification:</strong> {cbo.operationDetails?.psic || "N/A"}</p>
         <p><strong>Target Members:</strong> {cbo.operationDetails?.target_members || "N/A"}</p>
-        <p><strong>Number of Male Members:</strong> {numberOfMembers.male}</p>
-        <p><strong>Number of Female Members:</strong> {numberOfMembers.female}</p>
-        <p><strong>Total Members:</strong> {totalMembers}</p>
-
-        <h2>Annual Production</h2>
+        <p><strong>Area / Scope of Production:</strong> {cbo.operationDetails?.production_scope || "N/A"}</p>
+        <p><strong>Area / Scope of Sales:</strong> {cbo.operationDetails?.sales_scope || "N/A"}</p>
+        <p><strong>Sponsor Agency:</strong> {cbo.operationDetails?.sponsor_agency || "N/A"}</p>
+        <p><strong>Other Sponsor Agency:</strong> {cbo.operationDetails?.other_sponsor_agency || "N/A"}</p>
+        
+        <div className="table-container">
+        <table className="styled-table">
+          <thead>
+            <tr>
+              <th colSpan="2" style={{ textAlign: "center", padding: "5px" }}>
+                Number of Members
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={{ textAlign: "left", padding: "5px" }}><strong style={{ marginLeft: "10px"}}>Male:</strong></td>
+              <td>{numberOfMembers.male}</td>
+            </tr>
+            <tr>
+              <td style={{ textAlign: "left", padding: "5px" }}><strong style={{ marginLeft: "10px"}}>Female:</strong></td>
+              <td >{numberOfMembers.female}</td>
+            </tr>
+            <tr>
+              <td style={{ textAlign: "left", padding: "5px" }}><strong style={{ marginLeft: "10px"}}>Total Members:</strong></td>
+              <td>{totalMembers}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        
+        <h3 style={{textAlign: "center"}}>Annual Production</h3>
         {cbo.operationDetails?.annual_production?.length > 0 ? (
           <div className="table-container">
             <table className="styled-table">
@@ -80,7 +117,39 @@ const CBOdetailsPage = () => {
           <p>No production data available.</p>
         )}
 
-        <h2>Procurement Experience</h2>
+        <div className="table-container">
+          <table className="styled-table">
+            <thead>
+              <tr>
+                <th colSpan="2" style={{ textAlign: "center", padding: "5px" }}>
+                  Financial Overview
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ textAlign: "left", padding: "5px" }}><strong>Total Assets:</strong></td>
+                <td style={{ textAlign: "left", padding: "5px" }}>
+                  {cbo.operationDetails?.total_assets || "N/A"}
+                </td>
+              </tr>
+              <tr>
+                <td style={{ textAlign: "left", padding: "5px" }}><strong>Total Liabilities:</strong></td>
+                <td style={{ textAlign: "left", padding: "5px" }}>
+                  {cbo.operationDetails?.total_liabilities || "N/A"}
+                </td>
+              </tr>
+              <tr>
+                <td style={{ textAlign: "left", padding: "5px" }}><strong>Annual Gross Income:</strong></td>
+                <td style={{ textAlign: "left", padding: "5px" }}>
+                  {cbo.operationDetails?.annual_gross_income || "N/A"}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      <h3 style={{ textAlign: "center", margin: "5px auto" }}>Procurement Experience</h3>
         {cbo.operationDetails?.procurement_experience?.length > 0 ? (
           <div className="table-container">
             <table className="styled-table">
@@ -109,18 +178,32 @@ const CBOdetailsPage = () => {
         )}
 
         <h2>Contact Information</h2>
-        <p><strong>Primary Contact Name:</strong> {cbo.primaryContact?.name || "N/A"}</p>
+        <h3>Primary Contact Person</h3>
+        <p><strong>Complete Name:</strong> {cbo.primaryContact?.name || "N/A"}</p>
         <p><strong>Designation:</strong> {cbo.primaryContact?.designation || "N/A"}</p>
         <p><strong>Email:</strong> {cbo.primaryContact?.email || "N/A"}</p>
-        <p><strong>Phone:</strong> {cbo.primaryContact?.telephone || cbo.primaryContact?.mobile || "N/A"}</p>
+        <p><strong>Telephone Number:</strong> {cbo.primaryContact?.telephone || "N/A"}</p>
+        <p><strong>Mobile Number:</strong> {cbo.primaryContact?.mobile || "N/A"}</p>
+
+        <h3>Secondary Contact Person</h3>
+        <p><strong>Complete Name:</strong> {cbo.secondaryContact?.name || "N/A"}</p>
+        <p><strong>Designation:</strong> {cbo.secondaryContact?.designation || "N/A"}</p>
+        <p><strong>Email:</strong> {cbo.secondaryContact?.email || "N/A"}</p>
+        <p><strong>Telephone Number:</strong> {cbo.secondaryContact?.telephone || "N/A"}</p>
+        <p><strong>Mobile Number:</strong> {cbo.secondaryContact?.mobile || "N/A"}</p>
 
         <h2>Legal Documents</h2>
         {cbo.files && Object.keys(cbo.files).length > 0 ? (
           <ul>
             {Object.keys(cbo.files).map((fileKey) => (
-              <li key={fileKey}>
-                <strong>{fileKey}:</strong> <a href={cbo.files[fileKey]?.url} target="_blank" rel="noopener noreferrer">View File</a>
-              </li>
+              cbo.files[fileKey]?.file ? ( // ✅ Only show if file exists
+                <li key={fileKey}>
+                  <strong>{fileKey}:</strong> 
+                  <a href={`http://yourserver.com/${cbo.files[fileKey]?.file}`} target="_blank" rel="noopener noreferrer">
+                    View File
+                  </a>
+                </li>
+              ) : null
             ))}
           </ul>
         ) : (

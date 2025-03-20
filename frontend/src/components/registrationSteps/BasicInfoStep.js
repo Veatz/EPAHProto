@@ -1,5 +1,5 @@
 const BasicInfoStep = ({ formData, setFormData, nextStep }) => {
-  const wordLimit = 50;
+  const wordLimit = 16;
 
   const handleDescriptionChange = (e) => {
     const description = e.target.value;
@@ -13,7 +13,6 @@ const BasicInfoStep = ({ formData, setFormData, nextStep }) => {
 
   // Calculate the current word count and remaining words
   const wordCount = formData.description.trim().split(/\s+/).length;
-  const remainingWords = wordLimit - wordCount;
 
   // Set the color based on the word count exceeding the limit
   const wordCountStyle = {

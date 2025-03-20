@@ -26,20 +26,20 @@ const FileUploadStep = ({ formData, setFormData, prevStep, handleSubmit, loading
   
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
-  
+
+    if (!file) return; // ✅ Prevent unnecessary updates
+
     setFormData((prevData) => ({
-      ...prevData,
-      files: {
-        ...prevData.files,
-        [field]: file
-          ? {
-              file,
-              ...Object.fromEntries((subFieldsByFile[field] || []).map((key) => [key, ""])), // Initialize only relevant subfields
-            }
-          : undefined, // Remove subfields if file is removed
-      },
+        ...prevData,
+        files: {
+            ...prevData.files,
+            [field]: {
+                file,
+                ...Object.fromEntries((subFieldsByFile[field] || []).map((key) => [key, ""])), // Initialize subfields
+            },
+        },
     }));
-  };
+};
   
   const handleInputChange = (e, field, subField) => {
     setFormData((prevData) => ({
