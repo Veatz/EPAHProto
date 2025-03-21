@@ -14,9 +14,11 @@ const CBOdetailsPage = () => {
         if (!response.ok) throw new Error("Failed to fetch CBO");
   
         const json = await response.json();
-        console.log("🔹 CBO Data:", json); // ✅ Check full response
-        console.log("🔹 CBO Files:", json.files || "No files found");
-  
+        if (cbo && cbo.files) { // ✅ Ensure `cbo` and `cbo.files` exist before logging
+          console.log("🔹 CBO Data:", cbo);
+          console.log("🔹 CBO Files:", cbo.files);
+        }
+
         setCBO(json);
       } catch (error) {
         console.error("❌ Error fetching CBO:", error.message);
@@ -198,30 +200,30 @@ const CBOdetailsPage = () => {
         <p><strong>Mobile Number:</strong> {cbo.secondaryContact?.mobile || "N/A"}</p>
 
         <h2>Legal Documents</h2>
-        {cbo.files && Object.keys(cbo.files).length > 0 ? (
+        {cbo?.files && Object.keys(cbo.files).length > 0 ? (
           <ul>
             {Object.entries(cbo.files).map(([fileKey, fileData]) =>
               fileData?.file ? (
                 <li key={fileKey}>
-                  <strong>{fileKey.replace(/([A-Z])/g, " $1").trim()}:</strong>  
+                  <strong>{fileKey.replace(/([A-Z])/g, " $1").trim()}:</strong>
                   <a
-                    href={`http://localhost:4000/uploads/${fileData.file}`}  
+                    href={`http://localhost:4000/uploads/${fileData.file}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     View File
                   </a>
 
-                  {/* ✅ Display subfields if they exist */}
-                  {Object.keys(fileData).length > 1 && (
+                  {/* ✅ Display subfields only if they exist */}
+                  {fileData && Object.keys(fileData).length > 1 && (
                     <ul>
-                      {Object.entries(fileData).map(([subField, value]) =>
-                        subField !== "file" && value ? ( // Exclude "file" field
+                      {Object.entries(fileData)
+                        .filter(([subField]) => subField !== "file") // ✅ Exclude "file"
+                        .map(([subField, value]) => (
                           <li key={subField}>
                             <strong>{subField.replace(/([A-Z])/g, " $1").trim()}:</strong> {value}
                           </li>
-                        ) : null
-                      )}
+                        ))}
                     </ul>
                   )}
                 </li>

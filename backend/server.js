@@ -86,7 +86,17 @@ app.post("/api/cbos", async (req, res) => {
         // ✅ Ensure uploaded files are mapped correctly
         let filesData = {};
         Object.keys(req.files).forEach((field) => {
-            filesData[field] = { file: req.files[field][0].filename }; // ✅ Store correctly
+            filesData[field] = { file: req.files[field][0].filename };
+
+            // ✅ Add subfields from req.body
+            if (req.body[field]) {
+                try {
+                    const subfields = JSON.parse(req.body[field]); // Ensure it's parsed correctly
+                    filesData[field] = { ...filesData[field], ...subfields };
+                } catch (error) {
+                    console.error(`❌ Error parsing subfields for ${field}:`, error);
+                }
+            }
         });
 
         parsedData.files = filesData; // ✅ Attach files correctly
