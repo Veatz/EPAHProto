@@ -3,13 +3,11 @@ import BasicInfoStep from "./registrationSteps/BasicInfoStep"; // Step 1
 import OperationStep from "./registrationSteps/OperationStep"; // Step 2
 import ContactStep from "./registrationSteps/ContactStep"; // Step 3
 import FileUploadStep from "./registrationSteps/FileUploadStep"; // Step 4
-import { useCBOContext } from "../context/CBOcontext";
 
 const RegistrationForm = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const { dispatch } = useCBOContext();
 
   // 🔹 Initial Form Data (including files)
   const [formData, setFormData] = useState({

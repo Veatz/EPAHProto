@@ -5,6 +5,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const cboRoutes = require("./routes/cbos");
 const multer = require("./middleware/multer");
+const CBOMODEL = require("./models/CBO"); // ✅ Ensure correct path
 
 const app = express();
 
@@ -47,8 +48,8 @@ app.use(
 );
 
 // ✅ Parse JSON AFTER multer
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "25mb" }));
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 
 // ✅ Debugging Middleware
 app.use((req, res, next) => {
@@ -56,6 +57,67 @@ app.use((req, res, next) => {
     console.log("🔹 Body:", req.body);
     console.log("🔹 Files:", req.files);
     next();
+});
+
+// For File Upload
+app.post("/api/cbos", async (req, res) => {
+    try {
+        console.log("🟢 Upload Request Received");
+        console.log("🔹 Body:", req.body);
+        console.log("🔹 Files:", req.files);
+
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({ error: "No files uploaded" });
+        }
+
+        // ✅ Parse JSON fields properly
+        const parsedData = {
+            ...req.body,
+            operationDetails: JSON.parse(req.body.operationDetails || "{}"),
+            primaryContact: JSON.parse(req.body.primaryContact || "{}"),
+            secondaryContact: JSON.parse(req.body.secondaryContact || "{}"),
+        };
+
+        // ✅ Fix `representation` extra quotes issue
+        if (parsedData.representation) {
+            parsedData.representation = parsedData.representation.replace(/['"]+/g, '');
+        }
+
+        // ✅ Ensure uploaded files are mapped correctly
+        let filesData = {};
+        Object.keys(req.files).forEach((field) => {
+            filesData[field] = { file: req.files[field][0].filename }; // ✅ Store correctly
+        });
+
+        parsedData.files = filesData; // ✅ Attach files correctly
+
+        // ✅ Save to MongoDB
+        const newCBO = new CBOMODEL(parsedData);
+        await newCBO.save();
+
+        res.json({ message: "Upload successful", cbo: newCBO });
+
+    } catch (error) {
+        console.error("❌ Error handling upload:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+// Getting the Files for Display
+app.get("/api/cbos/:id", async (req, res) => {
+    try {
+        const cbo = await CBOMODEL.findById(req.params.id);
+        if (!cbo) return res.status(404).json({ error: "CBO not found" });
+
+        console.log("🟢 Sending CBO Data:", JSON.stringify(cbo, null, 2)); // ✅ Log formatted data
+        console.log("🔹 CBO Files:", cbo.files || "No files found"); // ✅ Check if files exist
+
+        res.json(cbo);
+    } catch (err) {
+        console.error("❌ Error fetching CBO:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
 // ✅ API Routes
@@ -75,6 +137,9 @@ mongoose
     });
 
     app.use((err, req, res, next) => {
+        if (err.code === "LIMIT_FILE_SIZE") {
+            return res.status(400).json({ error: "File too large. Max size is 25MB." });
+        }
         console.error("❌ Global Error:", err);
         res.status(500).json({ error: "Internal Server Error. Please check backend logs." });
     });

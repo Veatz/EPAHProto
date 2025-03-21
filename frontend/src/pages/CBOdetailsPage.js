@@ -12,13 +12,18 @@ const CBOdetailsPage = () => {
       try {
         const response = await fetch(`/api/cbos/${id}`);
         if (!response.ok) throw new Error("Failed to fetch CBO");
+  
         const json = await response.json();
+        console.log("🔹 CBO Data:", json); // ✅ Check full response
+        console.log("🔹 CBO Files:", json.files || "No files found");
+  
         setCBO(json);
       } catch (error) {
+        console.error("❌ Error fetching CBO:", error.message);
         setError(error.message);
       }
     };
-
+  
     fetchCBO();
   }, [id]);
 
@@ -195,16 +200,33 @@ const CBOdetailsPage = () => {
         <h2>Legal Documents</h2>
         {cbo.files && Object.keys(cbo.files).length > 0 ? (
           <ul>
-            {Object.keys(cbo.files).map((fileKey) => (
-              cbo.files[fileKey]?.file ? ( // ✅ Only show if file exists
+            {Object.entries(cbo.files).map(([fileKey, fileData]) =>
+              fileData?.file ? (
                 <li key={fileKey}>
-                  <strong>{fileKey}:</strong> 
-                  <a href={`http://yourserver.com/${cbo.files[fileKey]?.file}`} target="_blank" rel="noopener noreferrer">
+                  <strong>{fileKey.replace(/([A-Z])/g, " $1").trim()}:</strong>  
+                  <a
+                    href={`http://localhost:4000/uploads/${fileData.file}`}  
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     View File
                   </a>
+
+                  {/* ✅ Display subfields if they exist */}
+                  {Object.keys(fileData).length > 1 && (
+                    <ul>
+                      {Object.entries(fileData).map(([subField, value]) =>
+                        subField !== "file" && value ? ( // Exclude "file" field
+                          <li key={subField}>
+                            <strong>{subField.replace(/([A-Z])/g, " $1").trim()}:</strong> {value}
+                          </li>
+                        ) : null
+                      )}
+                    </ul>
+                  )}
                 </li>
               ) : null
-            ))}
+            )}
           </ul>
         ) : (
           <p>No legal documents uploaded.</p>
