@@ -34,7 +34,49 @@ const CBOdetailsPage = () => {
 
   const numberOfMembers = cbo.operationDetails?.number_of_members || { male: 0, female: 0 };
   const totalMembers = (numberOfMembers.male || 0) + (numberOfMembers.female || 0);
+  // ✅ File Labels for Display
+  const fileLabels = {
+    rctResolution: "RCT Resolution",
+    dti: "Department of Trade and Industry (DTI)",
+    sec: "Securities and Exchange Commission (SEC)",
+    cda: "Cooperative Development Authority (CDA)",
+    csoNpoNgoPo: (
+      <>
+        Civil Society Organization (CSO) <br />
+        Non-Government Organization (NGO) <br />
+        People's Organization (PO)
+      </>
+    ),
+    doleRule1020: "Department of Labor and Employment (DOLE) Registration under Rule 1020",
+    bankBook: "Bank Book/Books of Account",
+    auditedFinancialStatement: "Updated / Audited Financial Statement",
+    latestITR: "Latest Income Tax Return (ITR)",
+    salesInvoice: "Sales Invoice",
+    businessPermit: "Business Permit (Mayor's Permit)",
+    ffeDis: "Farmers and Fisherfolk Enterprise Development Information System (FFEDIS)",
+    birRegistration: "BIR Registration",
+    philGeps: "Philippine Government Electronic Procurement (PhilGEPS)",
+    rsbsa: "Registry System for Basic Sectors in Agriculture (RSBSA)",
+    fishAr: "Fisherfolk Registration (FISH-AR)",
+    fda: "Food and Drug Administration (FDA)",
+    agrarianReformBeneficiaries: "Agrarian Reform Beneficiaries Organizations",
+    farmersAssociation: "Farmer's Association",
+    irrigatorsAssociation: "Irrigators Association",
+    laborUnionsWorkersAssoc: "Labor Unions and Workers' Association",
+    slpa: "Sustainable Livelihood Program Associations",
+  };
 
+  // ✅ Subfield Labels
+  const subFieldLabels = {
+    territorialScope: "Territorial Scope",
+    dateOfIssuance: "Date of Issuance",
+    dateOfValidity: "Date of Validity",
+    typeOfRegistration: "Type of Registration",
+    registryNo: "Registry Number",
+    typeOfCooperative: "Type of Cooperative",
+    agencyIssuer: "Agency Issuer",
+    year: "Year",
+  };
   return (
     <div className="cbo-details-page">
       <div className="cbo-document">
@@ -198,30 +240,31 @@ const CBOdetailsPage = () => {
         <p><strong>Email:</strong> {cbo.secondaryContact?.email || "N/A"}</p>
         <p><strong>Telephone Number:</strong> {cbo.secondaryContact?.telephone || "N/A"}</p>
         <p><strong>Mobile Number:</strong> {cbo.secondaryContact?.mobile || "N/A"}</p>
-
+        
         <h2>Legal Documents</h2>
         {cbo?.files && Object.keys(cbo.files).length > 0 ? (
           <ul>
             {Object.entries(cbo.files).map(([fileKey, fileData]) =>
               fileData?.file ? (
                 <li key={fileKey}>
-                  <strong>{fileKey.replace(/([A-Z])/g, " $1").trim()}:</strong>
+                  <strong>{fileLabels[fileKey] || fileKey}:</strong>{" "}
+                  {/* ✅ Display proper label instead of file key */}
                   <a
                     href={`http://localhost:4000/uploads/${fileData.file}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    View File
+                    {fileData.file.replace(/^\d+-/, "")} {/* ✅ Show actual file name instead of "View File" */}
                   </a>
 
-                  {/* ✅ Display subfields only if they exist */}
+                  {/* ✅ Display subfields dynamically */}
                   {fileData && Object.keys(fileData).length > 1 && (
                     <ul>
                       {Object.entries(fileData)
                         .filter(([subField]) => subField !== "file") // ✅ Exclude "file"
                         .map(([subField, value]) => (
                           <li key={subField}>
-                            <strong>{subField.replace(/([A-Z])/g, " $1").trim()}:</strong> {value}
+                            <strong>{subFieldLabels[subField] || subField}:</strong> {value}
                           </li>
                         ))}
                     </ul>
